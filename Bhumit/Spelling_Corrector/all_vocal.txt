@@ -1,4 +1,4 @@
-//names start									  
+﻿//names start									  
 									   adivarekar
 									   adivarekar
 									   adivarekar
@@ -43816,18 +43816,9 @@ Jammu (Winter)	1947	 —
 20	Madhya Pradesh	Bhopal	Bhopal	Jabalpur	1956	Nagpur (1861–1956)
 Maharashtra
 maharashtra
-Maharashtra
-maharashtra
-Maharashtra
-maharashtra
-Maharashtra Maharashtra Maharashtra Maharashtra Maharashtra Maharashtra Maharashtra Maharashtra
-maharashtra maharashtra maharashtra maharashtra maharashtra maharashtra maharashtra maharashtra
-Mumbai Mumbai Mumbai Mumbai Mumbai Mumbai Mumbai Mumbai Mumbai Mumbai
-Mumbai
 Mumbai
 MUMBAI
 mumbai
-mumbai mumbai mumbai
 21	Maharashtra	Mumbai
 Nagpur 	Mumbai 
 Nagpur 	Mumbai	1818
