@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
+// import FontAwesomeIcon from "@fortawesome/react-fontawesome";
+import "font-awesome/css/font-awesome.min.css";
 
 import Home from "./components/HomeComponent";
 import Hello from "./components/HelloComponent";
@@ -13,15 +15,34 @@ class App extends Component {
       <BrowserRouter>
         <div className="App">
           <div className="Sidebar">
+            <button className="Add-docs-button">Add new document</button>
             <ul>
               <li>
-                <Link to="/hello">Hello</Link>
+                <i
+                  className="fa fa-plus"
+                  style={{ color: "#8268FC", marginRight: "8px" }}
+                />
+                <Link to="/hello" style={{ color: "#000" }}>
+                  Add
+                </Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
+                <i
+                  className="fa fa-edit"
+                  style={{ color: "#FFC53A", marginRight: "8px" }}
+                />
+                <Link to="/about" style={{ color: "#000" }}>
+                  Edit
+                </Link>
               </li>
               <li>
-                <Link to="/books">Books</Link>
+                <i
+                  className="fa fa-thumbs-up"
+                  style={{ color: "#EB3569", marginRight: "8px" }}
+                />
+                <Link to="/books" style={{ color: "#000" }}>
+                  Use
+                </Link>
               </li>
             </ul>
           </div>
