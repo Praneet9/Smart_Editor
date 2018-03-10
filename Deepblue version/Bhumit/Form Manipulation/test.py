@@ -47,8 +47,9 @@ a = 1
 for c in cnts:
     # computing bounding box for rectangle
     (x, y, w, h) = cv2.boundingRect(c)
-
-    if w >= 5 and h >= 5:
+    #print("Area = " + str(w * h) + " No constraints")
+    if w * h > 115:
+        #print("Area = " + str(w * h) + " Constraints")
         roi = ""
         roi = result_copy[y:y + h, x:x + w]
         ret, roi = cv2.threshold(
@@ -60,7 +61,7 @@ for c in cnts:
         cv2.imshow("final", roi)
         cv2.waitKey(0)
         # roi = ""
-        cv2.imwrite("img_" + l + ".jpg", roi)
+        #cv2.imwrite("img_" + l + ".jpg", roi)
         a = a + 1
         # cv2.waitKey(0)
 
