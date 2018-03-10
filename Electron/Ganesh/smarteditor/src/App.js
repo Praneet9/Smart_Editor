@@ -4,10 +4,10 @@ import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 // import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
 
-import Home from "./components/HomeComponent";
-import Hello from "./components/HelloComponent";
-import About from "./components/AboutComponent";
-import Books from "./components/BooksComponent";
+import Add from "./components/AddComponent";
+import Edit from "./components/EditComponent";
+import Use from "./components/UseComponent";
+// import Hello from "./components/HelloComponent";
 
 class App extends Component {
   render() {
@@ -22,7 +22,7 @@ class App extends Component {
                   className="fa fa-plus"
                   style={{ color: "#8268FC", marginRight: "8px" }}
                 />
-                <Link to="/hello" style={{ color: "#000" }}>
+                <Link to="/" style={{ color: "#000" }}>
                   Add
                 </Link>
               </li>
@@ -31,7 +31,7 @@ class App extends Component {
                   className="fa fa-edit"
                   style={{ color: "#FFC53A", marginRight: "8px" }}
                 />
-                <Link to="/about" style={{ color: "#000" }}>
+                <Link to="/edit" style={{ color: "#000" }}>
                   Edit
                 </Link>
               </li>
@@ -40,7 +40,7 @@ class App extends Component {
                   className="fa fa-thumbs-up"
                   style={{ color: "#EB3569", marginRight: "8px" }}
                 />
-                <Link to="/books" style={{ color: "#000" }}>
+                <Link to="/use" style={{ color: "#000" }}>
                   Use
                 </Link>
               </li>
@@ -48,10 +48,10 @@ class App extends Component {
           </div>
 
           <Switch className="Main">
-            <Route exact path="/" component={Home} />
-            <Route path="/about" component={About} />
-            <Route path="/hello" component={Hello} />
-            <Route path="/books" component={Books} />
+            <Route exact path="/" component={Add} />
+            <Route path="/edit" component={Edit} />
+            <Route path="/use" component={Use} />
+            {/* <Route path="/books" component={Books} /> */}
           </Switch>
         </div>
       </BrowserRouter>
