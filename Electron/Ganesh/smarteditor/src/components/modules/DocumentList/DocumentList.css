@@ -1,0 +1,17 @@
+.compass-sidebar-content {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+
+.resize-trigger {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  padding: 8px;
+  z-index: 1;
+}

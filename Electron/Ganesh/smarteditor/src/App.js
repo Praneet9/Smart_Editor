@@ -4,10 +4,7 @@ import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 // import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
 
-import Add from "./components/AddComponent";
-import Edit from "./components/EditComponent";
-import Use from "./components/UseComponent";
-// import Hello from "./components/HelloComponent";
+import FilterDocs from "../src/components/modules/FilterDocs/FilterDocs.js";
 
 class App extends Component {
   render() {
@@ -18,10 +15,6 @@ class App extends Component {
           <div className="instance-header">
             <div className="instance-header-connecting-string">
               <div className="instance-header-icon-container">
-                {/* <i
-                  className="far fa-file-alt"
-                  className="instance-header-icon-home"
-                /> */}
                 <i className="fa fa-file instance-header-icon-home" />
               </div>
               <div className="instance-header-details">All Documents</div>
@@ -40,23 +33,12 @@ class App extends Component {
           {/* body */}
           <div className="page">
             {/* sidebar */}
-            <div className="compass-sidebar">
-              {/* search */}
-              <div className="compass-sidebar-filter">
-                <i className="fa fa-search compass-sidebar-search-icon" />
-                <input
-                  className="compass-sidebar-search-input"
-                  placeholder="filter"
-                />
-              </div>
+            <FilterDocs />
 
-              {/* left */}
-              <div className="compass-sidebar-content">
-                <div className="resize-trigger">{/* All document list */}</div>
-              </div>
-            </div>
             {/* content */}
-            <div className="content" />
+            <div className="content">
+              <OCRThisDocument />
+            </div>
           </div>
         </div>
 
