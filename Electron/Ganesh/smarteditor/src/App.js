@@ -13,8 +13,54 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <div className="App">
-          <div className="Sidebar">
+        <div className="page-container">
+          {/* header */}
+          <div className="instance-header">
+            <div className="instance-header-connecting-string">
+              <div className="instance-header-icon-container">
+                {/* <i
+                  className="far fa-file-alt"
+                  className="instance-header-icon-home"
+                /> */}
+                <i className="fa fa-file instance-header-icon-home" />
+              </div>
+              <div className="instance-header-details">All Documents</div>
+            </div>
+            <div className="instance-header-items-left ">
+              <div className="instance-header-details-left-details">
+                {/* content header title which document is open */}
+              </div>
+            </div>
+            <div className="instance-header-items-right">
+              <div className="instance-header-items-right-details">
+                Document
+              </div>
+            </div>
+          </div>
+          {/* body */}
+          <div className="page">
+            {/* sidebar */}
+            <div className="compass-sidebar">
+              {/* search */}
+              <div className="compass-sidebar-filter">
+                <i className="fa fa-search compass-sidebar-search-icon" />
+                <input
+                  className="compass-sidebar-search-input"
+                  placeholder="filter"
+                />
+              </div>
+
+              {/* left */}
+              <div className="compass-sidebar-content">
+                <div className="resize-trigger">{/* All document list */}</div>
+              </div>
+            </div>
+            {/* content */}
+            <div className="content" />
+          </div>
+        </div>
+
+        {/* <div className="Sidebar">
             <button className="Add-docs-button">Add new document</button>
             <ul>
               <li>
@@ -45,15 +91,14 @@ class App extends Component {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
-          <Switch className="Main">
+        {/* <Switch className="Main">
             <Route exact path="/" component={Add} />
             <Route path="/edit" component={Edit} />
             <Route path="/use" component={Use} />
-            {/* <Route path="/books" component={Books} /> */}
-          </Switch>
-        </div>
+            <Route path="/books" component={Books} /> 
+          </Switch> */}
       </BrowserRouter>
     );
   }

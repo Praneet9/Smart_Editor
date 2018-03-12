@@ -28,7 +28,7 @@ class Home extends Component {
     //   .then(res => {
     //     console.log(res);
     //   });
-    console.log(`Selected file is ${JSON.stringify(this.state.selectedFile)}`);
+    // console.log(`Selected file is ${JSON.stringify(this.state.selectedFile)}`);
     console.log(
       `Selected file name is ${JSON.stringify(this.state.selectedFile.name)}`
     );
