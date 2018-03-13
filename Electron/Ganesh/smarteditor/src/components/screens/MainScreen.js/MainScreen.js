@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 // import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
 
-import FilterDocs from "../../modules/Filterdocs/FilterDocs";
+import FilterDocs from "../Filterdocs/FilterDocs";
 import OCRThisDocument from "../OCRThisDocument/OCRThisDocument";
 
 class MainScreen extends Component {
@@ -34,7 +34,9 @@ class MainScreen extends Component {
           <FilterDocs />
 
           {/* content */}
-          <div className="content">{/* <OCRThisDocument /> */}</div>
+          <div className="content">
+            <OCRThisDocument />
+          </div>
         </div>
       </div>
     );
