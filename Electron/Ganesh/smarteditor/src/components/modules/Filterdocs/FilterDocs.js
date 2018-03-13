@@ -1,6 +1,7 @@
 import React from "react";
 import "./FilterDocs.css";
 import DocumentList from "../DocumentList/DocumentList";
+import "font-awesome/css/font-awesome.min.css";
 
 const FilterDocs = () => {
   return (

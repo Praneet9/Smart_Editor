@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./DocumentList.css";
+// import { BrowserRouter, Link } from "react-router-dom";
 
 export default class DocumentList extends Component {
   render() {
@@ -7,7 +8,9 @@ export default class DocumentList extends Component {
       <div>
         {/* left */}
         <div className="compass-sidebar-content">
-          <div className="resize-trigger">{/* All document list */}</div>
+          <div className="resize-trigger">
+            {/* All document list show here */}
+          </div>
         </div>
       </div>
     );
