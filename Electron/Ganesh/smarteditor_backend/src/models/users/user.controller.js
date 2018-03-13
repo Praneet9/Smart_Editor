@@ -48,3 +48,38 @@ export const createUser = async (req, res) => {
       }
     });
 };
+
+// Signin user
+export const SigninUser = async (req, res) => {
+  User.find({ email: req.body.email })
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          error: true,
+          message: `Authentication failed!`
+        });
+      }
+
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            error: true,
+            message: `Authentication failed!`
+          });
+        }
+
+        if (result) {
+          return res.status(200).json({
+            error: false,
+            message: "Successfuly login :)"
+          });
+        } else {
+          return res.status(401).json({
+            error: false,
+            message: `Authentication failed!`
+          });
+        }
+      });
+    });
+};
