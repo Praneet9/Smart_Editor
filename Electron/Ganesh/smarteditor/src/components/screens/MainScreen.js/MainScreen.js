@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Link, Switch, Redirect } from "react-router-dom";
 // import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import "font-awesome/css/font-awesome.min.css";
 
-import FilterDocs from "../Filterdocs/FilterDocs";
+import Sidebar from "../Sidebar/Sidebar";
 import OCRThisDocument from "../OCRThisDocument/OCRThisDocument";
 
 class MainScreen extends Component {
@@ -22,16 +22,19 @@ class MainScreen extends Component {
           <div className="instance-header-items-left ">
             <div className="instance-header-details-left-details">
               {/* content header title which document is open */}
+              Document Name
             </div>
           </div>
           <div className="instance-header-items-right">
-            <div className="instance-header-items-right-details">Document</div>
+            <div className="instance-header-items-right-details">
+              Document Detials
+            </div>
           </div>
         </div>
         {/* body */}
         <div className="page">
           {/* sidebar */}
-          <FilterDocs />
+          <Sidebar />
 
           {/* content */}
           <div className="content">

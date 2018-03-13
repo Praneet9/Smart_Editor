@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import "./DocumentList.css";
+import "./TabList.css";
 // import { BrowserRouter, Link } from "react-router-dom";
 
-export default class DocumentList extends Component {
+export default class TabList extends Component {
   render() {
     return (
       <div>
