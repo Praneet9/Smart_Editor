@@ -45,7 +45,8 @@
     				});
     				$('#btnViewRel').click(function () {
     					var areas = $('img#example').selectAreas('relativeAreas');
-    					displayAreas(areas);
+              var imagename = $("#example").attr("src");
+    					displayAreas(areas, imagename);
     				});
     				$('#btnReset').click(function () {
     					output("reset")
@@ -99,7 +100,7 @@
     			var selectionExists;
 
     			function areaToString (area) {
-    				return (typeof area.id === "undefined" ? "" : (area.id + ": ")) + area.x + ':' + area.y  + ' ' + area.width + 'x' + area.height + '<br />'
+    				return (typeof area.id === "undefined" ? "" : "") + '[' + area.x + ',' + area.y  + ',' + area.width + ',' + area.height + '],'
     			}
 
     			function output (text) {
@@ -113,11 +114,24 @@
 
     			// Display areas coordinates in a div
     			function displayAreas (areas) {
-    				var text = "";
+            var text = "";
     				$.each(areas, function (id, area) {
     					text += areaToString(area);
     				});
-    				output(text);
+            $.ajax({
+              type: "POST",
+              url: "/coordinates",
+              contentType: "application/json",
+              data: JSON.stringify({"coordinates":"[" + text + "]", "imagename":imagename.slice(0, -1)}),
+              dataType: "json",
+              success: function(response) {
+                  console.log(response);
+              },
+              error: function(err) {
+                  console.log(err);
+              }
+          });
+    				//output(text);
     			};
 
     		</script>
@@ -164,7 +178,7 @@
 
         <div id="wrapper">
     			<div class="image-decorator">
-    				<img alt="Image principale" id="example" src="example.jpg"/>
+    				<img alt="Image principale" id="example" src={{name}}/>
     			</div>
     			<table>
     				<tr>

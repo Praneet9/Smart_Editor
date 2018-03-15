@@ -65,27 +65,28 @@
 
         <div class="wrapper">
             <div class="container-fluid">
+                <form action="/pdftoimage" method="POST" enctype=multipart/form-data>
+                    <div class="form-group row centered">
 
-              <div class="form-group row centered">
+                            <div class="form-group row">
+                                <label class="col-2 col-form-label">Template</label>
+                                <div class="col-10">
+                                    <input type="text" class="form-control" value="Some text value...">
+                                </div>
+                            </div>
 
-                      <div class="form-group row">
-                          <label class="col-2 col-form-label">Template</label>
-                          <div class="col-10">
-                              <input type="text" class="form-control" value="Some text value...">
-                          </div>
-                      </div>
-
-                        <div class="fileupload fileupload-new" data-provides="fileupload">
-                            <button type="button" class="btn btn-custom btn-file">
-                                <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
-                                <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                                <input type="file" class="btn-light" />
-                            </button>
-                            <span class="fileupload-preview" style="margin-left:5px;"></span>
-                            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
-
+                            <div class="fileupload fileupload-new" data-provides="fileupload">
+                                  <button type="button" class="btn btn-custom btn-file">
+                                      <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
+                                      <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                      <input type="file" class="btn-light" accept=".pdf" name="pdf"/>
+                                  </button>
+                                  <span class="fileupload-preview" style="margin-left:5px;"></span>
+                                  <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+                            </div>
                     </div>
-              </div>
+                    <button type="submit" value="submit">Submit</button>
+                </form>
             </div> <!-- end container -->
         </div>
         <!-- end wrapper -->
