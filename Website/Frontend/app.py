@@ -6,6 +6,8 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import pytesseract as tesseract
 import os
+import cv2
+import numpy as np
 
 client = MongoClient('localhost', 27017)
 db = client.smart_editor
@@ -13,6 +15,18 @@ nonfilled_collection = db.non_filled
 filled_collection = db.filled
 
 app = Flask(__name__)
+
+# Preprocess images
+def preprocess(image):
+    image = cv2.imread(image,0)
+    image = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    return image
+
+# Preprocessing helper methods
+def cropImage(x, y, w, h, image):
+    # Crop image here
+    croppedImage = image[y:y + h,x:x + w]
+    return croppedImage
 
 @app.route('/')
 def index():
@@ -49,13 +63,14 @@ def getTags():
     coordinates = data['coordinates']
     labeldict = {}
     index = 0
+    image = preprocess(imagename)
     for x, y, w, h in coordinates:
         x, y, w, h = int(x), int(y), int(w), int(h)
-        croppedSection = cropImage(x, y, w, h, nonfilledtesseract)
+        croppedSection = cropImage(x, y, w, h, image)
         label = tesseract.image_to_string(croppedSection)
         labeldict[index] = {label: (x, y, w, h)}
         index = index + 1
-
+    print(labeldict)
     return render_template('render.html', name = [imagename, labeldict])
 
 @app.route('/save_coordinates', methods=['POST'])

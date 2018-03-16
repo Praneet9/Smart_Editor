@@ -113,14 +113,14 @@
     			};
 
     			// Display areas coordinates in a div
-    			function displayAreas (areas) {
+    			function displayAreas (areas, imagename) {
             var text = "";
     				$.each(areas, function (id, area) {
     					text += areaToString(area);
     				});
             $.ajax({
               type: "POST",
-              url: "/coordinates",
+              url: "/tesseract",
               contentType: "application/json",
               data: JSON.stringify({"coordinates":"[" + text + "]", "imagename":imagename.slice(0, -1)}),
               dataType: "json",
@@ -131,7 +131,7 @@
                   console.log(err);
               }
           });
-    				//output(text);
+    				output(text);
     			};
 
     		</script>
