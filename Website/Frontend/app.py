@@ -8,6 +8,7 @@ import pytesseract as tesseract
 import os
 import cv2
 import numpy as np
+import ast
 
 client = MongoClient('localhost', 27017)
 db = client.smart_editor
@@ -64,7 +65,20 @@ def getTags():
     labeldict = {}
     index = 0
     image = preprocess(imagename)
-    for x, y, w, h in coordinates:
+    #convert str to list
+    tcoords = ast.literal_eval(coordinates)
+    print(tcoords)
+    print(type(tcoords))
+    #print(list(coordinates))
+    # coordinates = coordinates[1:-1]
+    # print(coordinates)
+    # tolist = eval(coordinates)
+    # print(tolist)
+    #print(type(coordinates))
+
+    # x = [x.strip() for x in tolist]
+    # print(x)
+    for x, y, w, h in tcoords:
         x, y, w, h = int(x), int(y), int(w), int(h)
         croppedSection = cropImage(x, y, w, h, image)
         label = tesseract.image_to_string(croppedSection)
