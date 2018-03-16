@@ -4,7 +4,8 @@ import PythonMagick
 from pymongo import MongoClient
 from datetime import datetime
 from werkzeug.utils import secure_filename
-from pytesseract import tesseract
+import pytesseract as tesseract
+import os
 
 client = MongoClient('localhost', 27017)
 db = client.smart_editor
@@ -17,15 +18,17 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('pdftoimage', methods=['POST'])
+@app.route('/pdftoimage', methods=['POST'])
 def pdftoimage():
     time = str(datetime.now())
     time = time.replace(' ', '')
     time = time.replace(':', '')
     pdffile = request.files['pdf']
+    pdffile.save(os.path.join('./static/temporary', secure_filename(pdffile.filename)))
+
     img = Image()
     img.density('300')
-    img.read(pdffile)
+    img.read('./static/temporary/' + secure_filename(pdffile.filename))
 
     size = "%sx%s" % (img.columns(), img.rows())
 
@@ -35,7 +38,8 @@ def pdftoimage():
     output_img.magick('JPG')
     output_img.quality(90)
 
-    output_jpg = "./non_filled_images/" + "nonfilled_" + time + ".jpg"
+    output_jpg = "./static/non_filled_images/" + "nonfilled_" + time + ".jpg"
+    output_img.write(output_jpg)
     return render_template('coordinates.html', name = output_jpg)
 
 @app.route('/tesseract', methods=['POST'])
@@ -45,12 +49,13 @@ def getTags():
     coordinates = data['coordinates']
     labeldict = {}
     index = 0
-    for int(x), int(y), int(w), int(h) in coordinates:
+    for x, y, w, h in coordinates:
+        x, y, w, h = int(x), int(y), int(w), int(h)
         croppedSection = cropImage(x, y, w, h, nonfilledtesseract)
         label = tesseract.image_to_string(croppedSection)
         labeldict[index] = {label: (x, y, w, h)}
         index = index + 1
-    
+
     return render_template('render.html', name = [imagename, labeldict])
 
 @app.route('/save_coordinates', methods=['POST'])
