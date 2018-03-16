@@ -4,18 +4,18 @@ from imutils import contours
 import imutils
 
 # Read blank form
-form = cv2.imread('./test_images/nonfilled_300.jpeg', cv2.IMREAD_GRAYSCALE)
+form = cv2.imread('./test_images/nonfilled_300.jpg', cv2.IMREAD_GRAYSCALE)
 form = np.array(form)
 # form = cv2.GaussianBlur(form, (5,5), 0)
 form = cv2.threshold(
-    form, 127, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-form = cv2.dilate(form, np.ones((3, 3), np.uint8), iterations=1)
+    form, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+form = cv2.dilate(form, np.ones((2, 2), np.uint8), iterations=4)
 cv2.imshow('Form', form)
 cv2.waitKey(0)
 # cv2.destroyAllWindows()
 
 fill_form = cv2.imread(
-    './test_images/filled_300.jpeg', cv2.IMREAD_GRAYSCALE)
+    './test_images/filled_300.jpg', cv2.IMREAD_GRAYSCALE)
 fill_form = np.array(fill_form)
 # fill_form = cv2.GaussianBlur(fill_form, (5,5), 0)
 fill_form = cv2.threshold(
@@ -30,7 +30,7 @@ cv2.waitKey(0)
 # Subtracting fill_form - form to get the difference fields in images of the form
 result = np.subtract(fill_form, form)
 # Applying Inverse Thresholding to get white background
-result = cv2.threshold(result, 127, 255, cv2.THRESH_BINARY)[1]
+#result = cv2.threshold(result, 127, 255, cv2.THRESH_BINARY)[1]
 result_copy = result.copy()
 result = cv2.erode(result, np.ones((3, 3), np.uint8), iterations=1)
 cv2.imshow('Result', result)
@@ -43,13 +43,13 @@ cv2.waitKey(0)
 cv2.imwrite('testing.jpg', result)
 
 
-edged = cv2.Canny(result, 30, 150)
-cv2.imshow('Edges', edged)
-cv2.waitKey(0)
-kernel = np.ones((1, 10), np.uint8)
-edged = cv2.dilate(edged, kernel, iterations=1)
-cv2.imshow('Edges', edged)
-cv2.waitKey(0)
+# edged = cv2.Canny(result, 30, 150)
+# cv2.imshow('Edges', edged)
+# cv2.waitKey(0)
+# kernel = np.ones((1, 10), np.uint8)
+# edged = cv2.dilate(edged, kernel, iterations=1)
+# cv2.imshow('Edges', edged)
+# cv2.waitKey(0)
 # Find contours
 # ret, cnts, hierarchy = cv2.findContours(
 #     edged.copy(), cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
