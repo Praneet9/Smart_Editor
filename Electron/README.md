@@ -2,6 +2,8 @@
 
 ## Electron
 
+### From now onwards use NewEditor project
+
 # run ->
 
   yarn run build
