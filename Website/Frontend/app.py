@@ -59,33 +59,37 @@ def pdftoimage():
 
 @app.route('/tesseract', methods=['POST'])
 def getTags():
-    data = request.get_json()
-    imagename = data['imagename']
-    coordinates = data['coordinates']
-    labeldict = {}
-    index = 0
-    image = preprocess(imagename)
-    #convert str to list
-    tcoords = ast.literal_eval(coordinates)
-    print(tcoords)
-    print(type(tcoords))
-    #print(list(coordinates))
-    # coordinates = coordinates[1:-1]
-    # print(coordinates)
-    # tolist = eval(coordinates)
-    # print(tolist)
-    #print(type(coordinates))
-
-    # x = [x.strip() for x in tolist]
-    # print(x)
-    for x, y, w, h in tcoords:
-        x, y, w, h = int(x), int(y), int(w), int(h)
-        croppedSection = cropImage(x, y, w, h, image)
-        label = tesseract.image_to_string(croppedSection)
-        labeldict[index] = {label: (x, y, w, h)}
-        index = index + 1
-    print(labeldict)
-    return render_template('render.html', name = [imagename, labeldict])
+    data = request.form.get('tess')
+    print('Hello')
+    print(data)
+    # data = request.get_json()
+    # imagename = data['imagename']
+    # coordinates = data['coordinates']
+    # labeldict = {}
+    # index = 0
+    # image = preprocess(imagename)
+    # #convert str to list
+    # tcoords = ast.literal_eval(coordinates)
+    # print(tcoords)
+    # print(type(tcoords))
+    # #print(list(coordinates))
+    # # coordinates = coordinates[1:-1]
+    # # print(coordinates)
+    # # tolist = eval(coordinates)
+    # # print(tolist)
+    # #print(type(coordinates))
+    #
+    # # x = [x.strip() for x in tolist]
+    # # print(x)
+    # for x, y, w, h in tcoords:
+    #     x, y, w, h = int(x), int(y), int(w), int(h)
+    #     croppedSection = cropImage(x, y, w, h, image)
+    #     label = tesseract.image_to_string(croppedSection)
+    #     labeldict[index] = {label: (x, y, w, h)}
+    #     index = index + 1
+    # print(labeldict)
+    return render_template('render.html', name = data)
+    #return jsonify({'data': render_template('render.html', name = data)})
 
 @app.route('/save_coordinates', methods=['POST'])
 def save_coordinates():
