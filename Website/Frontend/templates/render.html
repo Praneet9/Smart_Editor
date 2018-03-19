@@ -70,6 +70,7 @@
                              <div class="text-center">
                                   <div class="card-box">
                                     <form action="/something" method="post">
+                                      <input type="text" name="imagename" value="{{imagename}}"/>
                                       {% set counter = datalist|length%}
                                       {% for id, label, x, y, w, h in datalist %}
                                         <input type="text" name={{id}} value="{{label}}"/>

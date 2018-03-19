@@ -59,7 +59,7 @@ def update_data(collection_name, idno, updation):
 
 def delete_row(collection_name, idno):
     '''
-    Deletes the complete row 
+    Deletes the complete row
     idno must be a dict {idno:'anything'}
     '''
     collection_name.delete_many(idno)
@@ -143,7 +143,7 @@ def getTags():
 
 @app.route('/something', methods=['POST'])
 def save_labels():
-    temp_dict = {}
+    temp_dict = {'imagename': request.form.get('imagename')}
     counter = int(request.form.get('counter'))
     for i in range(counter):
         # print(request.form.get(str(i)))
@@ -154,9 +154,15 @@ def save_labels():
         temp_dict[temp_key] = request.form.get(str(i) + 'coordinates').replace('/', '')
     insert_data(nonfilled_collection, temp_dict)
     cols = read_data(nonfilled_collection)
-    for c in cols:
-        print(c)
+    return render_template('index.html', notification = true)
 
+@app.route('/filled')
+def filled():
+    cols = read_data(nonfilled_collection)
+    images = []
+    for c in cols:
+        images.append(c['imagename'])
+    print(images)
 
 @app.route('/upload', methods=['POST'])
 def upload():
