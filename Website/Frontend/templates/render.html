@@ -58,37 +58,42 @@
 
 
 
+
                      <!-- Begin page -->
-         <div class="accountbg" style="background: url('../static/images/bg-1.jpg');background-size: cover;"></div>
+         <div class="accountbg" style="background: url('{{imagename}}');background-size: cover;"></div>
 
          <div class="wrapper-page account-page-full">
- 
              <div class="card">
                  <div class="card-block">
                      <div class="account-box">
-                         <div class="card-box p-5">                      
+                         <div class="card-box p-5">
                              <div class="text-center">
                                   <div class="card-box">
-                                    <table class="table table-bordered table-striped">
+                                    <form action="/something" method="post">
+                                      {% for id, label, x, y, w, h in datalist %}
+                                        <input type="text" name={{id}} value="{{label}}"/>
+                                        <input type = 'hidden' name = {{id + "coordinates"}} value = {{"["+x+","+y+","+w+","+h+"]"}}/>
+                                      {% endfor %}
+                                      <button type="submit" id="savecoordinates" name="button">zxczczxc</button>
+                                    </form>
+                                    <!-- <table class="table table-bordered table-striped">
                                        <tbody>
                                         <tr><td width="35%">Check Labels</td></tr>
+                                        {% for label in labellist %}
                                         <tr>
-                                        <td width="65%"><a href="#" id="inline-username" data-type="text" data-pk="1" data-title="Enter username">superuser</a></td>
+
+                                        <td width="65%"><a href="#" id="inline-username" data-type="text" data-pk="1" data-title="Enter username">{{label}}</a></td>
                                         </tr>
-                                        <tr>
-                                        <td width="65%"><a href="#" id="inline-pass" data-type="text" data-pk="2" data-title="Enter pass">pass
-                                        </a></td>
-                                        </tr>
+                                        {% endfor %}
                                        </tbody>
-                                    </table>
-                                </div> 
+                                    </table> -->
+                                </div>
                              </div>
                          </div>
                      </div>
                  </div>
              </div>
          </div>
-
 
         <!-- Footer -->
         <!-- <footer class="footer">
@@ -117,7 +122,7 @@
           <script src="../static/js/jquery.core.js"></script>
           <script src="../static/js/jquery.app.js"></script>
 
-          
+
 
     </body>
 </html>

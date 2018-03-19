@@ -118,19 +118,15 @@
     				$.each(areas, function (id, area) {
     					text += areaToString(area);
     				});
-            $.ajax({
-              type: "POST",
-              url: "/tesseract",
-              contentType: "application/json",
-              data: JSON.stringify({"coordinates":"[" + text + "]", "imagename":imagename.slice(0, -1)}),
-              dataType: "json",
-              success: function(response) {
-                  console.log(response);
-              },
-              error: function(err) {
-                  console.log(err);
-              }
-          });
+
+          // $.post(
+          //     "/tesseract",
+          //     { coordinates: text }
+          //  ).done(function (reply) {
+          //
+          //  });
+          $('#coordinates').attr('value', text);
+          $('#sendtorender').click()
     				output(text);
     			};
 
@@ -184,7 +180,9 @@
     				<tr>
     					<td class="actions">
     						<input type="button" id="btnView" value="Display areas" class="actionOn" />
+
     						<input type="button" id="btnViewRel" value="Display relative" class="actionOn" />
+
     						<input type="button" id="btnNew" value="Add New" class="actionOn" />
     						<input type="button" id="btnNews" value="Add 2 New" class="actionOn" />
     						<input type="button" id="btnReset" value="Reset" class="actionOn" />
@@ -196,6 +194,11 @@
     					</td>
     				</tr>
     			</table>
+          <form action="/tesseract" method="POST" style="display: none">
+            <input type="text" id = "imagename" name = "imagename" value={{name}}/>
+            <input type="text" id = "coordinates" name = "coordinates" value=""/>
+            <button type="submit" id="sendtorender" name="button"></button>
+          </form>
     		</div>
 
 
