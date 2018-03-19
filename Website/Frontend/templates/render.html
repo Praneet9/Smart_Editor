@@ -70,10 +70,12 @@
                              <div class="text-center">
                                   <div class="card-box">
                                     <form action="/something" method="post">
+                                      {% set counter = datalist|length%}
                                       {% for id, label, x, y, w, h in datalist %}
                                         <input type="text" name={{id}} value="{{label}}"/>
                                         <input type = 'hidden' name = {{id + "coordinates"}} value = {{"["+x+","+y+","+w+","+h+"]"}}/>
                                       {% endfor %}
+                                      <input type="text" name="counter" value={{counter}}>
                                       <button type="submit" id="savecoordinates" name="button">zxczczxc</button>
                                     </form>
                                     <!-- <table class="table table-bordered table-striped">
