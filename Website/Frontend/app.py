@@ -19,6 +19,7 @@ app = Flask(__name__)
 
 # Preprocess images
 def preprocess(image):
+    print(image)
     image = cv2.imread(image,0)
     image = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
     return image
@@ -26,6 +27,7 @@ def preprocess(image):
 # Preprocessing helper methods
 def cropImage(x, y, w, h, image):
     # Crop image here
+    print(x,y,w,h)
     croppedImage = image[y:y + h,x:x + w]
     return croppedImage
 
@@ -59,50 +61,47 @@ def pdftoimage():
 
 @app.route('/tesseract', methods=['POST'])
 def getTags():
-    data = request.form.get('tess')
-    print('Hello')
-    print(data)
-    # data = request.get_json()
-    # imagename = data['imagename']
-    # coordinates = data['coordinates']
-    # labeldict = {}
-    # index = 0
-    # image = preprocess(imagename)
-    # #convert str to list
-    # tcoords = ast.literal_eval(coordinates)
-    # print(tcoords)
-    # print(type(tcoords))
-    # #print(list(coordinates))
-    # # coordinates = coordinates[1:-1]
-    # # print(coordinates)
-    # # tolist = eval(coordinates)
-    # # print(tolist)
-    # #print(type(coordinates))
-    #
-    # # x = [x.strip() for x in tolist]
-    # # print(x)
-    # for x, y, w, h in tcoords:
-    #     x, y, w, h = int(x), int(y), int(w), int(h)
-    #     croppedSection = cropImage(x, y, w, h, image)
-    #     label = tesseract.image_to_string(croppedSection)
-    #     labeldict[index] = {label: (x, y, w, h)}
-    #     index = index + 1
-    # print(labeldict)
-    return render_template('render.html', name = data)
-    #return jsonify({'data': render_template('render.html', name = data)})
+    initialimagename = request.form.get('imagename')
+    imagename = initialimagename[:-1]
+    initialcoordinates = request.form.get('coordinates')
+    coordinates = initialcoordinates[:-1]
+    labeldict = {}
+    index = 0
+    print(imagename)
+    image = preprocess(imagename)
+    # convert str to list
+    tcoords = ast.literal_eval(coordinates)
+    labellist = []
+    label_coordinates = []
+    i = 0
+    datalist = []
+    for x, y, w, h in tcoords:
+        x, y, w, h = int(x), int(y), int(w), int(h)
+        croppedSection = cropImage(x, y, w, h, image)
+        label = tesseract.image_to_string(croppedSection).encode("utf-8")
+        coorlist = []
+        coorlist.append(str(index))
+        coorlist.append(label)
+        coorlist.append(str(x))
+        coorlist.append(str(y))
+        coorlist.append(str(w))
+        coorlist.append(str(h))
 
-@app.route('/save_coordinates', methods=['POST'])
-def save_coordinates():
-    data = request.get_json()
+        datalist.append(coorlist)
+        index = index + 1
+    print(datalist)
+    return render_template('render.html', imagename = imagename, datalist = datalist)
+
+@app.route('/something', methods=['POST'])
+def save_labels():
+    for i in range(4):
+        print(request.form.get(str(i)))
+        print(request.form.get(str(i) + "coordinates"))
 
 # {'imagename': 'name',
 #  'label1':'coordinates',
 #   'label2':'coordinates'}
 #[imagename, {'label':coordinates}, {}]
-
-
-
-
 
 @app.route('/upload', methods=['POST'])
 def upload():

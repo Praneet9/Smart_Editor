@@ -125,8 +125,8 @@
           //  ).done(function (reply) {
           //
           //  });
-          $('#testing').attr('value', text);
-          $('#clickme').click()
+          $('#coordinates').attr('value', text);
+          $('#sendtorender').click()
     				output(text);
     			};
 
@@ -195,8 +195,9 @@
     				</tr>
     			</table>
           <form action="/tesseract" method="POST" style="display: none">
-            <input type="text" id = "testing" name = "tess" value="tessa"/>
-            <button type="submit" id="clickme" name="button">sadasdasdasdasd</button>
+            <input type="text" id = "imagename" name = "imagename" value={{name}}/>
+            <input type="text" id = "coordinates" name = "coordinates" value=""/>
+            <button type="submit" id="sendtorender" name="button"></button>
           </form>
     		</div>
 

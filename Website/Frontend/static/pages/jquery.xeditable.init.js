@@ -22,6 +22,15 @@ $(function(){
         inputclass: 'form-control-sm'
     });
 
+    $('#inline').editable({
+        type: 'text',
+        pk: 2,
+        name: 'user',
+        title: 'Enter username',
+        mode: 'inline',
+        inputclass: 'form-control-sm'
+    });
+
     $('#inline-firstname').editable({
         validate: function(value) {
             if($.trim(value) == '') return 'This field is required';
