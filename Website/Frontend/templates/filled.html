@@ -96,10 +96,12 @@
                                             <img src="../static/images/file_icons/pdf.svg" alt="icon">
                                         </div>
                                         <a href="#" class="file-download"><i class="mdi mdi-download"></i> </a>
+                                        {% for imagename in images %}
                                         <div class="file-man-title">
                                             <h5 class="mb-0 text-overflow">{{imagename}}</h5>
                                             <p class="mb-0"><small>568.8 kb</small></p>
                                         </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                             </div>

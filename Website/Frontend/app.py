@@ -154,7 +154,7 @@ def save_labels():
         temp_dict[temp_key] = request.form.get(str(i) + 'coordinates').replace('/', '')
     insert_data(nonfilled_collection, temp_dict)
     cols = read_data(nonfilled_collection)
-    return render_template('index.html', notification = true)
+    return render_template('index.html', notification = True)
 
 @app.route('/filled')
 def filled():
@@ -163,6 +163,7 @@ def filled():
     for c in cols:
         images.append(c['imagename'])
     print(images)
+    return render_template('filled.html', images=images)
 
 @app.route('/upload', methods=['POST'])
 def upload():
