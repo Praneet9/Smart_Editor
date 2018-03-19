@@ -9,6 +9,8 @@ import os
 import cv2
 import numpy as np
 import ast
+import string
+import re
 
 client = MongoClient('localhost:27017')
 db = client.smart_editor
@@ -16,6 +18,10 @@ nonfilled_collection = db.non_filled
 filled_collection = db.filled
 
 app = Flask(__name__)
+
+def remove_punctuations(temp_string):
+    temp_string = re.sub(r'[^\w]', ' ', temp_string)
+    return temp_string
 
 ##Database Helper functions
 def insert_data(collection_name, args_dict):
@@ -120,7 +126,8 @@ def getTags():
     for x, y, w, h in tcoords:
         x, y, w, h = int(x), int(y), int(w), int(h)
         croppedSection = cropImage(x, y, w, h, image)
-        label = tesseract.image_to_string(croppedSection).encode("utf-8")
+        label = tesseract.image_to_string(croppedSection).replace('\\','')
+        print(label)
         coorlist = []
         coorlist.append(str(index))
         coorlist.append(label)
@@ -142,11 +149,13 @@ def save_labels():
         # print(request.form.get(str(i)))
         # print(request.form.get(str(i) + "coordinates"))
         # args_dict = {request.form.get(str(i)): request.form.get(str(i) + 'coordinates')}
-        temp_key = request.form.get(str(i)).replace('.', '')[2:-1]
-
+        temp_key = request.form.get(str(i)).replace('.', '')
+        temp_key = remove_punctuations(temp_key)
         temp_dict[temp_key] = request.form.get(str(i) + 'coordinates').replace('/', '')
     insert_data(nonfilled_collection, temp_dict)
-    return 'Success'
+    cols = read_data(nonfilled_collection)
+    for c in cols:
+        print(c)
 
 
 @app.route('/upload', methods=['POST'])
