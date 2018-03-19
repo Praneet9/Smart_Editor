@@ -71,6 +71,7 @@ const fileSelectedHandler = () => {
 const Sidebar = () => (
   <SidebarWrapper>
     <SidebarButton onClick={fileSelectedHandler}>Upload files</SidebarButton>
+
     <SidebarDiv>
       <SidebarUl>
         <Link to="/" style={SidebarLink}>

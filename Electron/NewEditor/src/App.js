@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import Sidebar from "./containers/Sidebar";
 import Main from "./containers/Main";
@@ -13,9 +12,9 @@ class App extends Component {
       <BrowserRouter>
         <AppLayout>
           <Sidebar />
-          <SubSidebar />
-          <Header documentName="Form" />
+          <Header documentName="Form Name" />
           <Main />
+          <SubSidebar />
         </AppLayout>
       </BrowserRouter>
     );

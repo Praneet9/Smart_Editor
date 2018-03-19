@@ -6,5 +6,5 @@ padding: 12px;
 margin: 0;
 justify-content: center;
 align-items: center
-flex-direction: column
+flex-direction: row
 `;
