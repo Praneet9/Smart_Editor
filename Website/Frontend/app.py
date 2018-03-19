@@ -165,6 +165,14 @@ def filled():
     print(images)
     return render_template('filled.html', images=images)
 
+@app.route('/script')
+def script():
+    filled = request.form.get("file")
+    print(filled)
+    selected = request.form.get("imgname")
+    print(selected)
+    return render_template('database.html')
+
 @app.route('/upload', methods=['POST'])
 def upload():
     print(request.form['pic'])
