@@ -11,6 +11,12 @@ import numpy as np
 import ast
 import string
 import re
+from keras.preprocessing import image as im
+from keras import backend as k
+import tensorflow as tf
+tf.reset_default_graph()
+from keras.models import load_model
+model=load_model('finalbestmodel.hdf5')
 
 label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
                     11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
@@ -146,8 +152,8 @@ def resize_to_pixel(dimensions, image):
 def prediction(char_image):
     squared = makeSquare(char_image)
     size28 = resize_to_pixel(28, squared)
-    #cv2.imshow('char resized', size28)
-    #cv2.waitKey(0)
+    ##cv2.imshow('char resized', size28)
+    ##cv2.waitKey(0)
     #cv2.destroyAllWindows()
     predict_img = im.img_to_array(size28)
     predict_img = np.expand_dims(predict_img, axis = 0)
@@ -193,8 +199,8 @@ def ocr(image):
             continue
 
         line = cropImage(line_x, line_y, line_w, line_h, image)
-        cv2.imshow('line', line)
-        cv2.waitKey(0)
+        #cv2.imshow('line', line)
+        #cv2.waitKey(0)
 
         # detecting edges in the image
         line_edges = cv2.Canny(line, 30, 150)
@@ -218,8 +224,8 @@ def ocr(image):
             #print("Word " + str(word_x), str(word_y), str(word_w), str(word_h))
 
             word = cropImage(word_x, word_y, word_w, word_h, line)
-            cv2.imshow('word', word)
-            cv2.waitKey(0)
+            #cv2.imshow('word', word)
+            #cv2.waitKey(0)
             word = cv2.erode(word, np.ones((1, 1), np.uint8), iterations=1)
 
             # detecting edges in the image
@@ -228,8 +234,8 @@ def ocr(image):
             # dilating word to detect individual characters
             kernel_char = np.ones((15, 5), np.uint8)
             dilated_char = cv2.dilate(word_edges, kernel_char, iterations=1)
-            cv2.imshow('dilated_char', dilated_char)
-            cv2.waitKey(0)
+            #cv2.imshow('dilated_char', dilated_char)
+            #cv2.waitKey(0)
 
             # finding contours of the characters
             im2, ctrs_char, hier = cv2.findContours(dilated_char.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -249,9 +255,9 @@ def ocr(image):
                 #print("Character " + str(char_x), str(char_y), str(char_w), str(char_h))
 
                 charac = cropImage(char_x, char_y, char_w, char_h, word)
-                cv2.imshow('charac', charac)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                #cv2.imshow('charac', charac)
+                #cv2.waitKey(0)
+                #cv2.destroyAllWindows()
 
                 character = prediction(charac)
                 character_list.append(character)
@@ -262,15 +268,17 @@ def ocr(image):
 # cropping and setdifferencing function
 def getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates):
     i = 0
-    for x, y, w, h in coordinates:
-
-        tag = tags[i]
-        i = i + 1
+    formvalues = {}
+    for key, value in coordinates.items():
+        label = key
+        value = ast.literal_eval(value)
+        x, y, w, h = value
+        x, y, w, h = int(x), int(y), int(w), int(h)
 
         # cropping non filled image
         nonfilledcroppedsection = cropImage(x, y, w, h, nonfilledimage)
-        cv2.imshow('nonfilledcroppedsection', nonfilledcroppedsection)
-        cv2.waitKey(0)
+        #cv2.imshow('nonfilledcroppedsection', nonfilledcroppedsection)
+        #cv2.waitKey(0)
 
         #dilating
         nonfilledcroppedsectiondilated = cropImage(x, y, w, h, nonfilledimagedilated)
@@ -285,16 +293,17 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates):
 
         # subtracting nonfilled image from filled image
         setDifference = np.subtract(filledcroppedsection, nonfilledcroppedsection)
-        cv2.imshow('setDifference', setDifference)
-        cv2.waitKey(0)
+        #cv2.imshow('setDifference', setDifference)
+        #cv2.waitKey(0)
 
         setDifference = cv2.medianBlur(setDifference, 3)
         #setDifference = cv2.erode(setDifference, np.ones((3, 3), np.uint8), iterations=1)
-        cv2.imshow('setDifferenceeroded', setDifference)
-        cv2.waitKey(0)
+        #cv2.imshow('setDifferenceeroded', setDifference)
+        #cv2.waitKey(0)
 
         converted_to_text = ocr(setDifference)
-        print(tag + ' : ' + converted_to_text)
+        formvalues[label] = converted_to_text
+    return formvalues
 
 @app.route('/')
 def index():
@@ -377,6 +386,7 @@ def save_labels():
 def filled():
     cols = read_data(nonfilled_collection)
     images = []
+    print(cols)
     for c in cols:
         images.append(c['imagename'])
     print(images)
@@ -420,16 +430,20 @@ def fetch_it():
     output_img.magick('JPG')
     output_img.quality(90)
     os.mkdir('./static/filled_images/' + time)
-    i = 1
     filledimage = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
     output_img.write(filledimage)
-
+    cols = read_data(non_filled)
+    for c in cols:
+        if c['imagename'] == nonfilledimagename:
+            del c['_id']
+            del c['imagename']
+            labelncoor = c
     nonfilledimage = cv2.threshold(nonfilledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
     filledimage = cv2.threshold(filledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-    getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates)
-
-    i = i + 1
+    formvalues = getNonfilledCroppedSections(nonfilledimage, filledimage, labelncoor)
+    print(formvalues)
+    return 'Success'
 #
 # @app.route('/upload', methods=['POST'])
 # def upload():
