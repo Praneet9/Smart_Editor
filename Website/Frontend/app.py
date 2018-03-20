@@ -475,7 +475,7 @@ def saveformvalues():
         formvalues[key] = value
     print(formvalues)
     insert_data(filled_collection, args_dict=formvalues)
-    return 'Record Created Successfully'
+    return render_template('success.html')
 #
 # @app.route('/upload', methods=['POST'])
 # def upload():
