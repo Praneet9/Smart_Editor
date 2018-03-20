@@ -16,6 +16,9 @@ from keras import backend as k
 import tensorflow as tf
 from keras.models import load_model, model_from_json
 tf.reset_default_graph()
+import Helping_Libraries.spell_corrector as sc
+import Helping_Libraries.word_segmentor as ws
+
 
 label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
                     11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
@@ -79,7 +82,7 @@ def delete_row(collection_name, idno):
 
 # Preprocess images
 def preprocess(image):
-    print(image)
+    #print(image)
     image = cv2.imread(image,0)
     image = cv2.threshold(image, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
     return image
@@ -87,7 +90,7 @@ def preprocess(image):
 # Preprocessing helper methods
 def cropImage(x, y, w, h, image):
     # Crop image here
-    print(x,y,w,h)
+    #print(x,y,w,h)
     croppedImage = image[y:y + h,x:x + w]
     return croppedImage
 
@@ -158,11 +161,12 @@ def prediction(char_image):
     #cv2.destroyAllWindows()
     predict_img = im.img_to_array(size28)
     predict_img = np.expand_dims(predict_img, axis = 0)
-    print(predict_img.shape)
+    #print(predict_img.shape)
     predictedarray = model.predict(predict_img)
     index = calculateClass(predictedarray[0])
 
     predicted_class = label_dictionary[index]
+    k.clear_session()
     return predicted_class
 
 def calculateClass(predictedarray):
@@ -260,19 +264,20 @@ def ocrit(image):
                 #cv2.imshow('charac', charac)
                 #cv2.waitKey(0)
                 #cv2.destroyAllWindows()
-                print(charac.shape)
+                #print(charac.shape)
                 character = prediction(charac)
+                
                 character_list.append(character)
-                print('OCRit',character)
+                #print('OCRit',character)
             word_list.append("".join(character_list))
     recognized_text = " ".join(word_list)
-    print(recognized_text)
+    #print(recognized_text)
     return recognized_text
 
 # cropping and setdifferencing function
 def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, coordinates):
     i = 0
-    formvalues = {}
+    formvalues = []
     for key, value in coordinates.items():
         label = key
         value = ast.literal_eval(value)
@@ -306,8 +311,10 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilat
         #cv2.waitKey(0)
 
         converted_to_text = ocrit(setDifference)
-        print('NFcropped Section',converted_to_text)
-        formvalues[label] = converted_to_text
+        #print('NFcropped Section',converted_to_text)
+        formvalues.append([str(i), label, converted_to_text])
+        i = i + 1
+        #tf.reset_default_graph()
     return formvalues
 
 @app.route('/')
@@ -346,7 +353,7 @@ def getTags():
     coordinates = initialcoordinates[:-1]
     labeldict = {}
     index = 0
-    print(imagename)
+    #print(imagename)
     image = preprocess(imagename)
     # convert str to list
     tcoords = ast.literal_eval(coordinates)
@@ -369,7 +376,7 @@ def getTags():
 
         datalist.append(coorlist)
         index = index + 1
-    print(datalist)
+    #print(datalist)
     return render_template('render.html', imagename = imagename, datalist = datalist)
 
 @app.route('/something', methods=['POST'])
@@ -394,7 +401,7 @@ def filled():
     print(cols)
     for c in cols:
         images.append(c['imagename'])
-    print(images)
+    #print(images)
     return render_template('filled.html', images=images)
 
 @app.route('/database')
@@ -403,7 +410,7 @@ def database():
     images = []
     for c in cols:
         images.append(c['imagename'])
-    print(images)
+    #print(images)
     return render_template('database.html', imagepath=images)
 
 @app.route('/script')
@@ -421,7 +428,7 @@ def ocr():
     time = time.replace(' ', '')
     time = time.replace(':', '')
     nonfilledimagename = request.form.get('imagename')
-    print(nonfilledimagename)
+    #print(nonfilledimagename)
     pdffile = request.files['pdf']
     pdffile.save(os.path.join('./static/temporary', secure_filename(pdffile.filename)))
     i = 0
@@ -453,8 +460,22 @@ def ocr():
     filledimage = cv2.threshold(cv2.imread(filledimage, 0), 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
     formvalues = getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, labelncoor)
+    #print(formvalues)
+    ## inserting into database
+    #insert_data(filled_collection, args_dict=formvalues)
+    return render_template('forms.html', formvalues=formvalues)
+
+@app.route('/saveformvalues', methods=['POST'])
+def saveformvalues():
+    counter = request.form.get('counter')
+    formvalues = {}
+    for counts in range(int(counter)):
+        key = request.form.get(str(counts))
+        value = request.form.get(str(counts) + "values")
+        formvalues[key] = value
     print(formvalues)
-    return 'Success'
+    insert_data(filled_collection, args_dict=formvalues)
+    return 'Record Created Successfully'
 #
 # @app.route('/upload', methods=['POST'])
 # def upload():

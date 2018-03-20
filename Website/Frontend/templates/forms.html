@@ -200,11 +200,16 @@
 
 
 
-                           <form action="#">
+                           <form action="/saveformvalues" method="POST">
+                                    {% set counter = formvalues|length %}
+                                   {% for i, key, value in formvalues %}
                                    <div class="form-group">
-                                   <label>ISBN 1</label>
-                                   <input type="text" placeholder=""  class="form-control">
+                                   <label id = {{i}} >{{key}}</label>
+                                   <input type="hidden" name={{i}} value = {{key}}>
+                                   <input type="text" value="{{value}}" name={{i + "values"}} maxlength="100">
                                    </div>
+                                   {% endfor %}
+                                   <input type="hidden" name="counter" value={{counter}} class="form-control">
                                    <button type="submit" class="btn btn-primary">Submit</button>
                            </form>
                        </div> <!-- end card-box -->
