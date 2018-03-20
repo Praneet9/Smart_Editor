@@ -40,11 +40,9 @@
               .siblings('input').prop('checked',false);
             $(this).addClass('check')
                   .siblings('input').prop('checked',true);
-                  var objs = $(this).attr('src');
+                  var objs = $(this).attr('class');
                   $('#checked-item').attr('value',objs);
           });
-
-
         });
         </script>
 
@@ -96,15 +94,15 @@
                     <div class="col-12">
                         <div class="card-box">
                             <h4 class="header-title m-t-0">Please Drop Filled Form Pdf's</h4>
-                              <form action="#" class="dropzone" id="dropzone">
+                              <form action="/ocr" class="dropzone" id="dropzone" method="POST" enctype=multipart/form-data>
                                 <div class="fallback">
-                                    <input name="file" type="file" multiple />
+                                    <input type="file" accept=".pdf" name="pdf" multiple />
                                 </div>
-                                <input name="img-name" type="text" value="" id="checked-item" />
+                                <input name="imagename" type="hidden" value="" id="checked-item" />
+                                <div class="clearfix text-right mt-3">
+                                    <button type="submit" class="btn btn-custom waves-effect waves-light">Submit</button>
+                                </div>
                             </form>
-                            <div class="clearfix text-right mt-3">
-                                <button type="button" class="btn btn-custom waves-effect waves-light">Submit</button>
-                            </div>
 
                         </div>
                     </div>
@@ -124,12 +122,6 @@
                                             <img src="../static/images/file_icons/pdf.svg" alt="icon">
                                         </div>
                                         <a href="#" class="file-download"><i class="mdi mdi-download"></i> </a>
-                                        {% for imagename in images %}
-                                        <div class="file-man-title">
-                                            <h5 class="mb-0 text-overflow">{{imagename}}</h5>
-                                            <p class="mb-0"><small>568.8 kb</small></p>
-                                        </div>
-                                        {% endfor %}
                                     </div>
                                 </div>
                             </div> -->
@@ -138,16 +130,16 @@
                               	<div class="row">
                               		<form method="get">
                               		<div class="form-group">
-                              		<div class="col-md-2 box"><label class="btn btn-primary"><img src="http://content.nike.com/content/dam/one-nike/globalAssets/menu_header_images/OneNike_Global_Nav_Icons_Running.png" alt="..." class="img-thumbnail img-check"><input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off"></label></div>
-                              		<div class="col-md-2 box"><label class="btn btn-primary"><img src="http://content.nike.com/content/dam/one-nike/globalAssets/menu_header_images/OneNike_Global_Nav_Icons_Basketball.png" alt="..." class="img-thumbnail img-check"><input type="radio" name="chk1" id="item4" value="val2" class="hidden" autocomplete="off"></label></div>
-                              		<div class="col-md-2 box"><label class="btn btn-primary"><img src="http://content.nike.com/content/dam/one-nike/globalAssets/menu_header_images/OneNike_Global_Nav_Icons_Football.png" alt="..." class="img-thumbnail img-check"><input type="radio" name="chk1" id="item4" value="val3" class="hidden" autocomplete="off"></label></div>
-                              		<div class="col-md-2 box"><label class="btn btn-primary"><img src="http://content.nike.com/content/dam/one-nike/globalAssets/menu_header_images/OneNike_Global_Nav_Icons_Soccer.png" alt="..." class="img-thumbnail img-check"><input type="radio" name="chk1" id="item4" value="val4" class="hidden" autocomplete="off"></label></div>
-                              		<div class="col-md-2 box"><label class="btn btn-primary"><img src="http://content.nike.com/content/dam/one-nike/globalAssets/menu_header_images/OneNike_Global_Nav_Icons_Soccer.png" alt="..." class="img-thumbnail img-check"><input type="radio" name="chk1" id="item4" value="val4" class="hidden" autocomplete="off"></label></div>
+                                    {% for imagename in images %}
+                                    <div class="col-md-2 box">
+                                      <label class="btn btn-primary">
+                                        <img src={{imagename}} class="img-thumbnail img-check">
+                                        <input type="radio" name="chk1" class="hidden" autocomplete="off">
+                                      </label>
+                                    </div>
+                                    {% endfor %}
                               		</div>
                               		<div class="clearfix"></div>
-
-                              		<input type="submit" value="Check Item" class="btn btn-success">
-
                               		</form>
                               	</div>
                             </div>
