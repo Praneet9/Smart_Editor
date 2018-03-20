@@ -9,13 +9,61 @@ import os
 import cv2
 import numpy as np
 import ast
+import string
+import re
 
-client = MongoClient('localhost', 27017)
+client = MongoClient('localhost:27017')
 db = client.smart_editor
 nonfilled_collection = db.non_filled
 filled_collection = db.filled
 
 app = Flask(__name__)
+
+def remove_punctuations(temp_string):
+    temp_string = re.sub(r'[^\w]', ' ', temp_string)
+    return temp_string
+
+##Database Helper functions
+def insert_data(collection_name, args_dict):
+    '''
+    db_name -> string i.e name of the db
+    args_dict -> a dictionary of entries in db
+    '''
+    collection_name.insert_one(args_dict)
+    print('Data inserted successfully')
+
+def read_data(collection_name):
+    '''
+    returns a cursor of objects
+    which can be iterated and printed
+    '''
+    cols = collection_name.find({})
+    return cols
+
+#Update in data base
+def update_data(collection_name, idno, updation):
+    '''
+    db_name -> string
+    idno -> id number of database entry in dict
+    eg:- {'id':'02'}
+    updation -> dict of elements to be updated
+    eg:-{
+        '$set':{
+            'name':'Kevin11',
+            'contact':'9664820165'
+        }
+    }
+    '''
+    collection_name.update_one(idno, updation)
+    print('Database updated successfully')
+
+def delete_row(collection_name, idno):
+    '''
+    Deletes the complete row
+    idno must be a dict {idno:'anything'}
+    '''
+    collection_name.delete_many(idno)
+    print('Row deleted')
 
 # Preprocess images
 def preprocess(image):
@@ -78,7 +126,8 @@ def getTags():
     for x, y, w, h in tcoords:
         x, y, w, h = int(x), int(y), int(w), int(h)
         croppedSection = cropImage(x, y, w, h, image)
-        label = tesseract.image_to_string(croppedSection).encode("utf-8")
+        label = tesseract.image_to_string(croppedSection).replace('\\','')
+        print(label)
         coorlist = []
         coorlist.append(str(index))
         coorlist.append(label)
@@ -94,14 +143,35 @@ def getTags():
 
 @app.route('/something', methods=['POST'])
 def save_labels():
-    for i in range(4):
-        print(request.form.get(str(i)))
-        print(request.form.get(str(i) + "coordinates"))
+    temp_dict = {'imagename': request.form.get('imagename')}
+    counter = int(request.form.get('counter'))
+    for i in range(counter):
+        # print(request.form.get(str(i)))
+        # print(request.form.get(str(i) + "coordinates"))
+        # args_dict = {request.form.get(str(i)): request.form.get(str(i) + 'coordinates')}
+        temp_key = request.form.get(str(i)).replace('.', '')
+        temp_key = remove_punctuations(temp_key)
+        temp_dict[temp_key] = request.form.get(str(i) + 'coordinates').replace('/', '')
+    insert_data(nonfilled_collection, temp_dict)
+    cols = read_data(nonfilled_collection)
+    return render_template('index.html', notification = True)
 
-# {'imagename': 'name',
-#  'label1':'coordinates',
-#   'label2':'coordinates'}
-#[imagename, {'label':coordinates}, {}]
+@app.route('/filled')
+def filled():
+    cols = read_data(nonfilled_collection)
+    images = []
+    for c in cols:
+        images.append(c['imagename'])
+    print(images)
+    return render_template('filled.html', images=images)
+
+@app.route('/script')
+def script():
+    filled = request.form.get("file")
+    print(filled)
+    selected = request.form.get("imgname")
+    print(selected)
+    return render_template('database.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
