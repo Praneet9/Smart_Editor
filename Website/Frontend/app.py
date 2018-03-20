@@ -149,6 +149,7 @@ def resize_to_pixel(dimensions, image):
 
 
 def prediction(char_image):
+    #tf.reset_default_graph()
     model=load_model('finalbestmodel.hdf5')
     squared = makeSquare(char_image)
     size28 = resize_to_pixel(28, squared)
