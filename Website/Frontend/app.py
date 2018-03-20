@@ -16,7 +16,6 @@ from keras import backend as k
 import tensorflow as tf
 from keras.models import load_model, model_from_json
 tf.reset_default_graph()
-model=load_model('finalbestmodel.hdf5')
 
 label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
                     11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
@@ -150,6 +149,7 @@ def resize_to_pixel(dimensions, image):
 
 
 def prediction(char_image):
+    model=load_model('finalbestmodel.hdf5')
     squared = makeSquare(char_image)
     size28 = resize_to_pixel(28, squared)
     ##cv2.imshow('char resized', size28)
