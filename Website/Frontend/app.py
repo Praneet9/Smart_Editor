@@ -254,6 +254,15 @@ def filled():
     print(images)
     return render_template('filled.html', images=images)
 
+@app.route('/database')
+def database():
+    cols = read_data(nonfilled_collection)
+    images = []
+    for c in cols:
+        images.append(c['imagename'])
+    print(images)
+    return render_template('database.html', imagepath=images)
+
 @app.route('/script')
 def script():
     filled = request.form.get("file")
