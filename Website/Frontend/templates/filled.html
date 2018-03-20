@@ -86,91 +86,78 @@
             </div> <!-- end navbar-custom -->
         </header>
         <!-- End Navigation Bar-->
-
-
         <div class="wrapper">
-            <div class="container-fluid">
+              <div class="container-fluid">
+              <div class="row">
+                      <div class="col-12">
+                          <div class="card-box">
+                              <h4 class="header-title m-b-30">Choose/Click on Template</h4>
 
-                  <div class="row">
-                    <div class="col-12">
-                    <form action="/ocr" method="POST" enctype=multipart/form-data>
-                        <div class="form-group row centered">
-                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                      <button type="button" class="btn btn-custom btn-file">
-                                          <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
-                                          <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
-                                          <input type="file" class="btn-light" accept=".pdf" name="pdf"/>
-                                      </button>
-                                      <span class="fileupload-preview" style="margin-left:5px;"></span>
-                                      <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
-                                      <input name="imagename" type="hidden" value="" id="checked-item" />
-                                      <button type="submit" value="submit" class="btn btn-custom btn-rounded waves-light waves-effect">Upload</button>
+                              <div class="row">
+                                  <div class="col-lg-3 col-xl-2">
+                                      <div class="file-man-box">
+                                  <form method="get">
+                                <div class="form-group">
+                                  {% for imagename in images %}
+                                  <div class="col-md-2 box">
+                                    <label class="btn btn-primary">
+                                      <img src={{imagename}} class="img-thumbnail img-check">
+                                      <input type="radio" name="chk1" class="hidden" autocomplete="off">
+                                    </label>
+                                  </div>
+                                  {% endfor %}
                                 </div>
-
-                        </div>
-
-
-                    </form>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card-box">
-                            <a href="index.html"><button type="button" class="btn btn-custom btn-rounded w-md waves-effect waves-light pull-right"><i class="mdi mdi-refresh"></i> Load More</button></a>
-                            <h4 class="header-title m-b-30">My Files</h4>
-
-                            <!-- <div class="row">
-                                <div class="col-lg-3 col-xl-2">
-                                    <div class="file-man-box">
-                                        <a href="" class="file-close"><i class="mdi mdi-close-circle"></i></a>
-                                        <div class="file-img-box">
-                                            <img src="../static/images/file_icons/pdf.svg" alt="icon">
-                                        </div>
-                                        <a href="#" class="file-download"><i class="mdi mdi-download"></i> </a>
-                                    </div>
-                                </div>
-                            </div> -->
-
-                            <div class="container">
-                              	<div class="row">
-                              		<form method="get">
-                              		<div class="form-group">
-                                    {% for imagename in images %}
-                                    <div class="col-md-2 box">
-                                      <label class="btn btn-primary">
-                                        <img src={{imagename}} class="img-thumbnail img-check">
-                                        <input type="radio" name="chk1" class="hidden" autocomplete="off">
-                                      </label>
-                                    </div>
-                                    {% endfor %}
-                              		</div>
-                              		<div class="clearfix"></div>
-                              		</form>
-                              	</div>
-                            </div>
-                        </div>
-                    </div><!-- end col -->
-                </div>
-                <!-- end row -->
-
-            </div> <!-- end container -->
+                                <div class="clearfix"></div>
+                                </form>
+                                      </div>
+                                  </div>
+                          </div>
+                      </div><!-- end col -->
+                  </div>
+                  <!-- end row -->
+              </div> <!-- end container -->
+          </div>
         </div>
-        <!-- end wrapper -->
 
+            <div class="wrapper">
+                  <div class="container-fluid">
+                  <div class="row">
+                          <div class="col-12">
+                              <div class="card-box">
+                                  <h4 class="header-title m-b-30">Upload HandWritten PDF</h4>
 
-        <!-- Footer -->
-        <!-- <footer class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        2018 © Highdmin. - Coderthemes.com
-                    </div>
-                </div>
+                                  <div class="row">
+                                    <form action="/ocr" method="POST" enctype=multipart/form-data class="form-horizontal ">
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <div class="fileupload-new thumbnail">
+                                                        <img src="../static/images/small/img-1.jpg" alt="image" />
+                                                    </div>
+                                                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 300px; max-height: 400px;"></div>
+                                                    <div>
+                                                        <button type="button" class="btn btn-custom btn-file">
+                                                            <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select image</span>
+                                                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                                            <input type="file" class="btn-light" accept=".pdf" name="pdf"/>
+                                                        </button>
+                                                        <button type="Submit" class="btn btn-custom btn-file">Submit
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                              </div>
+                          </div><!-- end col -->
+                      </div>
+                      <!-- end row -->
+                  </div> <!-- end container -->
+              </div>
             </div>
-        </footer> -->
-        <!-- End Footer -->
+              <!-- end wrapper -->
+
+
 
 
 
@@ -185,7 +172,7 @@
           <!-- Bootstrap fileupload js -->
           <script src="../static/plugins/bootstrap-fileupload/bootstrap-fileupload.js"></script>
           <script src="../static/plugins/dropzone/dropzone.js"></script>
-          
+
           <!-- App js -->
           <script src="../static/js/jquery.core.js"></script>
           <script src="../static/js/jquery.app.js"></script>
