@@ -14,8 +14,8 @@ import re
 from keras.preprocessing import image as im
 from keras import backend as k
 import tensorflow as tf
+from keras.models import load_model, model_from_json
 tf.reset_default_graph()
-from keras.models import load_model
 model=load_model('finalbestmodel.hdf5')
 
 label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
@@ -157,6 +157,7 @@ def prediction(char_image):
     #cv2.destroyAllWindows()
     predict_img = im.img_to_array(size28)
     predict_img = np.expand_dims(predict_img, axis = 0)
+    print(predict_img.shape)
     predictedarray = model.predict(predict_img)
     index = calculateClass(predictedarray[0])
 
@@ -174,7 +175,7 @@ def calculateClass(predictedarray):
         index = index + 1
     return predictedclassindex
 
-def ocr(image):
+def ocrit(image):
 
     # detecting edges in the image
     image_edges = cv2.Canny(image, 30, 150)
@@ -258,15 +259,17 @@ def ocr(image):
                 #cv2.imshow('charac', charac)
                 #cv2.waitKey(0)
                 #cv2.destroyAllWindows()
-
+                print(charac.shape)
                 character = prediction(charac)
                 character_list.append(character)
+                print('OCRit',character)
             word_list.append("".join(character_list))
     recognized_text = " ".join(word_list)
+    print(recognized_text)
     return recognized_text
 
 # cropping and setdifferencing function
-def getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates):
+def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, coordinates):
     i = 0
     formvalues = {}
     for key, value in coordinates.items():
@@ -301,7 +304,8 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates):
         #cv2.imshow('setDifferenceeroded', setDifference)
         #cv2.waitKey(0)
 
-        converted_to_text = ocr(setDifference)
+        converted_to_text = ocrit(setDifference)
+        print('NFcropped Section',converted_to_text)
         formvalues[label] = converted_to_text
     return formvalues
 
@@ -409,15 +413,17 @@ def script():
     print(selected)
     return render_template('database.html')
 
-@app.route('/ocr')
-def fetch_it():
+@app.route('/ocr', methods = ['POST'])
+def ocr():
+    labelncoor = {}
     time = str(datetime.now())
     time = time.replace(' ', '')
     time = time.replace(':', '')
     nonfilledimagename = request.form.get('imagename')
+    print(nonfilledimagename)
     pdffile = request.files['pdf']
     pdffile.save(os.path.join('./static/temporary', secure_filename(pdffile.filename)))
-
+    i = 0
     img = Image()
     img.density('300')
     img.read('./static/temporary/' + secure_filename(pdffile.filename))
@@ -432,16 +438,20 @@ def fetch_it():
     os.mkdir('./static/filled_images/' + time)
     filledimage = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
     output_img.write(filledimage)
-    cols = read_data(non_filled)
+    cols = read_data(nonfilled_collection)
     for c in cols:
         if c['imagename'] == nonfilledimagename:
             del c['_id']
             del c['imagename']
-            labelncoor = c
+            for key, values in c.items():
+                labelncoor[key] = values
+    print(labelncoor)
+    nonfilledimage = cv2.imread(nonfilledimagename, 0)
     nonfilledimage = cv2.threshold(nonfilledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    filledimage = cv2.threshold(filledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    nonfilledimagedilated = cv2.dilate(nonfilledimage.copy(), np.ones((2, 2), np.uint8), iterations = 4)
+    filledimage = cv2.threshold(cv2.imread(filledimage, 0), 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
-    formvalues = getNonfilledCroppedSections(nonfilledimage, filledimage, labelncoor)
+    formvalues = getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, labelncoor)
     print(formvalues)
     return 'Success'
 #
