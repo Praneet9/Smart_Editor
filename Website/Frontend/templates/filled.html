@@ -18,7 +18,33 @@
         <link href="../static/css/icons.css" rel="stylesheet" type="text/css" />
         <link href="../static/css/style.css" rel="stylesheet" type="text/css" />
 
-        <script src="../static/js/modernizr.min.js"></script>
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+        <!-- <script src="../static/js/modernizr.min.js"></script> -->
+        <style>
+        .check
+        {
+          opacity:0.5;
+          color:#996;
+        }
+        .box{
+          margin-bottom:5px;
+        }
+        </style>
+        <script>
+        $(document).ready(function(e){
+        $('.img-check').click(function(e) {
+              $('.img-check').not(this).removeClass('check')
+              .siblings('input').prop('checked',false);
+            $(this).addClass('check')
+                  .siblings('input').prop('checked',true);
+                  var objs = $(this).attr('class');
+                  $('#checked-item').attr('value',objs);
+          });
+        });
+        </script>
 
     </head>
 
@@ -68,15 +94,15 @@
                     <div class="col-12">
                         <div class="card-box">
                             <h4 class="header-title m-t-0">Please Drop Filled Form Pdf's</h4>
-                              <form action="#" class="dropzone" id="dropzone">
+                              <form action="/ocr" class="dropzone" id="dropzone" method="POST" enctype=multipart/form-data>
                                 <div class="fallback">
-                                    <input name="file" type="file" multiple />
+                                    <input type="file" accept=".pdf" name="pdf" multiple />
                                 </div>
-
+                                <input name="imagename" type="hidden" value="" id="checked-item" />
+                                <div class="clearfix text-right mt-3">
+                                    <button type="submit" class="btn btn-custom waves-effect waves-light">Submit</button>
+                                </div>
                             </form>
-                            <div class="clearfix text-right mt-3">
-                                <button type="button" class="btn btn-custom waves-effect waves-light">Submit</button>
-                            </div>
 
                         </div>
                     </div>
@@ -88,7 +114,7 @@
                             <a href="index.html"><button type="button" class="btn btn-custom btn-rounded w-md waves-effect waves-light pull-right"><i class="mdi mdi-refresh"></i> Load More</button></a>
                             <h4 class="header-title m-b-30">My Files</h4>
 
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-lg-3 col-xl-2">
                                     <div class="file-man-box">
                                         <a href="" class="file-close"><i class="mdi mdi-close-circle"></i></a>
@@ -96,20 +122,27 @@
                                             <img src="../static/images/file_icons/pdf.svg" alt="icon">
                                         </div>
                                         <a href="#" class="file-download"><i class="mdi mdi-download"></i> </a>
-                                        {% for imagename in images %}
-                                        <div class="file-man-title">
-                                            <h5 class="mb-0 text-overflow">{{imagename}}</h5>
-                                            <p class="mb-0"><small>568.8 kb</small></p>
-                                        </div>
-                                        {% endfor %}
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <div class="text-center mt-3">
-                                <button type="button" class="btn btn-outline-danger w-md waves-effect waves-light"><i class="mdi mdi-upload"></i> Submit</button>
+                            <div class="container">
+                              	<div class="row">
+                              		<form method="get">
+                              		<div class="form-group">
+                                    {% for imagename in images %}
+                                    <div class="col-md-2 box">
+                                      <label class="btn btn-primary">
+                                        <img src={{imagename}} class="img-thumbnail img-check">
+                                        <input type="radio" name="chk1" class="hidden" autocomplete="off">
+                                      </label>
+                                    </div>
+                                    {% endfor %}
+                              		</div>
+                              		<div class="clearfix"></div>
+                              		</form>
+                              	</div>
                             </div>
-
                         </div>
                     </div><!-- end col -->
                 </div>
@@ -132,9 +165,11 @@
         </footer> -->
         <!-- End Footer -->
 
+
+
         <!-- jQuery  -->
-          <script src="../static/js/jquery.min.js"></script>
-          <script src="../static/js/popper.min.js"></script>
+          <!-- <script src="../static/js/jquery.min.js"></script> -->
+          <!-- <script src="../static/js/popper.min.js"></script> -->
           <script src="../static/js/bootstrap.min.js"></script>
           <script src="../static/js/waves.js"></script>
           <script src="../static/js/jquery.slimscroll.js"></script>
