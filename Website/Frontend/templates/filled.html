@@ -23,6 +23,7 @@
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
+
         <!-- <script src="../static/js/modernizr.min.js"></script> -->
         <style>
         .check
@@ -88,7 +89,7 @@
         <!-- End Navigation Bar-->
         <div class="wrapper">
               <div class="container-fluid">
-              <div class="row">
+              <!-- <div class="row">
                       <div class="col-12">
                           <div class="card-box">
                               <h4 class="header-title m-b-30">Choose/Click on Template</h4>
@@ -106,16 +107,35 @@
                                     </label>
                                   </div>
                                   {% endfor %}
+
+
+
                                 </div>
                                 <div class="clearfix"></div>
                                 </form>
 
                                   </div>
                           </div>
-                      </div><!-- end col -->
+                      </div>
                   </div>
-                  <!-- end row -->
-              </div> <!-- end container -->
+
+              </div> -->
+
+              <div class="row">
+		<!-- <form method="get"> -->
+		<div class="form-group">
+      {% for imagename in images %}
+		<div class="col-md-2 box">
+      <label class="btn btn-primary">
+        <img src={{imagename}} alt="..." class="img-thumbnail img-check">
+      <input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+    </label>
+  </div>
+    {% endfor %}
+    </div>
+		<div class="clearfix"></div>
+		<!-- </form> -->
+	</div>
           </div>
         </div>
 
