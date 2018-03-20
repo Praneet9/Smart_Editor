@@ -36,7 +36,7 @@
                         <ul class="navigation-menu">
 
                             <li class="has-submenu">
-                                <a href="index.html"><i class="icon-speedometer"></i>Dashboard</a>
+                                <a href="#"><i class="icon-speedometer"></i>Dashboard</a>
                             </li>
 
                             <li class="has-submenu">
@@ -46,11 +46,6 @@
                             <li class="has-submenu">
                                 <a href={{ url_for('filled') }}><i class="icon-briefcase"></i>Recognition</a>
                             </li>
-
-                            <li class="has-submenu">
-                                <a href="forms.html"><i class="icon-fire"></i>Forms</a>
-                            </li>
-
                             <li class="has-submenu">
                                 <a href={{ url_for('database') }}><i class="icon-docs"></i>Database</a>
                             </li>
@@ -67,16 +62,8 @@
 
         <div class="wrapper">
             <div class="container-fluid">
-                <form action="/pdftoimage" method="POST" enctype=multipart/form-data>
+                <!-- <form action="/pdftoimage" method="POST" enctype=multipart/form-data>
                     <div class="form-group row centered">
-
-                            <div class="form-group row">
-                                <label class="col-2 col-form-label">Template</label>
-                                <div class="col-10">
-                                    <input type="text" class="form-control" value="Some text value...">
-                                </div>
-                            </div>
-
                             <div class="fileupload fileupload-new" data-provides="fileupload">
                                   <button type="button" class="btn btn-custom btn-file">
                                       <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select file</span>
@@ -85,14 +72,52 @@
                                   </button>
                                   <span class="fileupload-preview" style="margin-left:5px;"></span>
                                   <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+                                  <button type="submit" value="submit" class="btn btn-custom btn-rounded waves-light waves-effect">Upload</button>
                             </div>
-                    </div>
-                    <button type="submit" value="submit">Submit</button>
-                </form>
-            </div> <!-- end container -->
-        </div>
-        <!-- end wrapper -->
 
+                    </div>
+
+                </form>
+ -->
+
+
+                    <div class="col-12">
+                        <div class="card-box">
+                            <h4 class="header-title m-t-0">Please Upload Template Here</h4>
+
+
+                            <form action="/pdftoimage" method="POST" enctype=multipart/form-data class="form-horizontal ">
+                                <div class="form-group row">
+                                    <label class="col-3 col-form-label">Image Upload</label>
+                                    <div class="col-9">
+                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                            <div class="fileupload-new thumbnail" style="width: 500px; height: 550px;">
+                                                <img src="../static/images/small/img-1.jpg" alt="image" />
+                                            </div>
+                                            <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 500px; max-height: 550px; line-height: 20px;"></div>
+                                            <div>
+                                                <button type="button" class="btn btn-custom btn-file">
+                                                    <span class="fileupload-new"><i class="fa fa-paper-clip"></i> Select image</span>
+                                                    <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                                                    <input type="file" class="btn-light" accept=".pdf" name="pdf"/>
+                                                </button>
+                                                <button type="Submit" class="btn btn-custom btn-file">Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--  end row -->
+
+
+              </div> <!-- end container -->
+              </div>
+              <!-- end wrapper -->
         <!-- Footer -->
         <!-- <footer class="footer">
             <div class="container">
