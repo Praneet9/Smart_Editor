@@ -71,12 +71,12 @@
                                     <form action="/something" method="post">
                                       <div class="row">
                                       <input type="hidden" name="imagename" value="{{imagename}}" class="form-control" maxlength="25" id="defaultconfig"/>
-                                      {% set counter = datalist|length%}
+                                      {% set counter = datalist|length %}
                                       {% for id, label, x, y, w, h in datalist %}
                                         <input type="text" name={{id}} value="{{label}}" class="form-control" maxlength="25" id="defaultconfig"/>
                                         <input type = 'hidden' name = {{id + "coordinates"}} value = {{"["+x+","+y+","+w+","+h+"]"}}/>
                                       {% endfor %}
-                                      <input type="hidden" name="counter" value={{counter}} class="form-control" maxlength="25" id="defaultconfig">
+                                      <input type="hidden" name="counter" value={{counter}} class="form-control" id="defaultconfig">
                                     </div>
                                     <button type="submit" id="savecoordinates" class="btn btn-custom btn-file" name="button">Submit</button>
                                     </form>

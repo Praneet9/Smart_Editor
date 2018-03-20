@@ -166,7 +166,7 @@ def prediction(char_image):
     index = calculateClass(predictedarray[0])
 
     predicted_class = label_dictionary[index]
-    #k.clear_session()
+    k.clear_session()
     return predicted_class
 
 def calculateClass(predictedarray):
@@ -277,7 +277,7 @@ def ocrit(image):
 # cropping and setdifferencing function
 def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, coordinates):
     i = 0
-    formvalues = {}
+    formvalues = []
     for key, value in coordinates.items():
         label = key
         value = ast.literal_eval(value)
@@ -312,7 +312,8 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilat
 
         converted_to_text = ocrit(setDifference)
         #print('NFcropped Section',converted_to_text)
-        formvalues[label] = converted_to_text
+        formvalues.append([str(i), label, converted_to_text])
+        i = i + 1
         #tf.reset_default_graph()
     return formvalues
 
@@ -459,12 +460,22 @@ def ocr():
     filledimage = cv2.threshold(cv2.imread(filledimage, 0), 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
 
     formvalues = getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilated, labelncoor)
-    print(formvalues)
-    
-            
+    #print(formvalues)
     ## inserting into database
+    #insert_data(filled_collection, args_dict=formvalues)
+    return render_template('forms.html', formvalues=formvalues)
 
-    return 'Success'
+@app.route('/saveformvalues', methods=['POST'])
+def saveformvalues():
+    counter = request.form.get('counter')
+    formvalues = {}
+    for counts in range(int(counter)):
+        key = request.form.get(str(counts))
+        value = request.form.get(str(counts) + "values")
+        formvalues[key] = value
+    print(formvalues)
+    insert_data(filled_collection, args_dict=formvalues)
+    return 'Record Created Successfully'
 #
 # @app.route('/upload', methods=['POST'])
 # def upload():
