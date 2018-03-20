@@ -168,6 +168,134 @@ def calculateClass(predictedarray):
         index = index + 1
     return predictedclassindex
 
+def ocr(image):
+
+    # detecting edges in the image
+    image_edges = cv2.Canny(image, 30, 150)
+
+    # dilating image to detect individual lines
+    kernel_line = np.ones((10, 80), np.uint8)
+    dilated_line = cv2.dilate(image_edges, kernel_line, iterations=1)
+
+    # finding contours of the line
+    im2, ctrs_line, hier = cv2.findContours(dilated_line.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    sorted_ctrs_line = sorted(ctrs_line, key=lambda ctr: cv2.boundingRect(ctr)[1])
+
+    # list of words
+    word_list = []
+
+    for i, ctr_line in enumerate(sorted_ctrs_line):
+        # getting coordinates of the line contour
+        line_x, line_y, line_w, line_h = cv2.boundingRect(ctr_line)
+
+        # if condition for removing unnecessary contours
+        if line_w * line_h < 10000:
+            continue
+
+        line = cropImage(line_x, line_y, line_w, line_h, image)
+        cv2.imshow('line', line)
+        cv2.waitKey(0)
+
+        # detecting edges in the image
+        line_edges = cv2.Canny(line, 30, 150)
+
+        # dilating line to detect individual words
+        kernel_word = np.ones((10, 60), np.uint8)
+        dilated_word = cv2.dilate(line_edges, kernel_word, iterations=1)
+
+        # finding contours of the word
+        im2, ctrs_word, hier = cv2.findContours(dilated_word.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        sorted_ctrs_word = sorted(ctrs_word, key=lambda ctr: cv2.boundingRect(ctr)[0])
+
+        for i, ctr_word in enumerate(sorted_ctrs_word):
+            # getting coordinates of the word contour
+            word_x, word_y, word_w, word_h = cv2.boundingRect(ctr_word)
+
+            # if condition for removing unnecessary contours
+            if word_w * word_h < 2500:
+                continue
+
+            #print("Word " + str(word_x), str(word_y), str(word_w), str(word_h))
+
+            word = cropImage(word_x, word_y, word_w, word_h, line)
+            cv2.imshow('word', word)
+            cv2.waitKey(0)
+            word = cv2.erode(word, np.ones((1, 1), np.uint8), iterations=1)
+
+            # detecting edges in the image
+            word_edges = cv2.Canny(word, 30, 150)
+
+            # dilating word to detect individual characters
+            kernel_char = np.ones((15, 5), np.uint8)
+            dilated_char = cv2.dilate(word_edges, kernel_char, iterations=1)
+            cv2.imshow('dilated_char', dilated_char)
+            cv2.waitKey(0)
+
+            # finding contours of the characters
+            im2, ctrs_char, hier = cv2.findContours(dilated_char.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            sorted_ctrs_char = sorted(ctrs_char, key=lambda ctr: cv2.boundingRect(ctr)[0])
+
+            # list of words
+            character_list = []
+
+            for i, ctr_char in enumerate(sorted_ctrs_char):
+                # getting coordinates of the character contour
+                char_x, char_y, char_w, char_h = cv2.boundingRect(ctr_char)
+
+                # if condition for removing unnecessary contours
+                if char_w * char_h < 180:
+                    continue
+
+                #print("Character " + str(char_x), str(char_y), str(char_w), str(char_h))
+
+                charac = cropImage(char_x, char_y, char_w, char_h, word)
+                cv2.imshow('charac', charac)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
+
+                character = prediction(charac)
+                character_list.append(character)
+            word_list.append("".join(character_list))
+    recognized_text = " ".join(word_list)
+    return recognized_text
+
+# cropping and setdifferencing function
+def getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates):
+    i = 0
+    for x, y, w, h in coordinates:
+
+        tag = tags[i]
+        i = i + 1
+
+        # cropping non filled image
+        nonfilledcroppedsection = cropImage(x, y, w, h, nonfilledimage)
+        cv2.imshow('nonfilledcroppedsection', nonfilledcroppedsection)
+        cv2.waitKey(0)
+
+        #dilating
+        nonfilledcroppedsectiondilated = cropImage(x, y, w, h, nonfilledimagedilated)
+
+        crop_h = nonfilledcroppedsection.shape[0]
+        crop_w = nonfilledcroppedsection.shape[1]
+
+        crop_x, crop_y = templateMatching(filledimage, nonfilledcroppedsection)
+
+        # cropping the matched template from filled image
+        filledcroppedsection = cropImage(crop_x, crop_y, crop_w, crop_h, filledimage)
+
+        # subtracting nonfilled image from filled image
+        setDifference = np.subtract(filledcroppedsection, nonfilledcroppedsection)
+        cv2.imshow('setDifference', setDifference)
+        cv2.waitKey(0)
+
+        setDifference = cv2.medianBlur(setDifference, 3)
+        #setDifference = cv2.erode(setDifference, np.ones((3, 3), np.uint8), iterations=1)
+        cv2.imshow('setDifferenceeroded', setDifference)
+        cv2.waitKey(0)
+
+        converted_to_text = ocr(setDifference)
+        print(tag + ' : ' + converted_to_text)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -284,8 +412,14 @@ def fetch_it():
     output_img.quality(90)
     os.mkdir('./static/filled_images/' + time)
     i = 1
-    output_jpg = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
-    output_img.write(output_jpg)
+    filledimage = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
+    output_img.write(filledimage)
+
+    nonfilledimage = cv2.threshold(nonfilledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+    filledimage = cv2.threshold(filledimage, 100, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+    getNonfilledCroppedSections(nonfilledimage, filledimage, coordinates)
+
     i = i + 1
 #
 # @app.route('/upload', methods=['POST'])
