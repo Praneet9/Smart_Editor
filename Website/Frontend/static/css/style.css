@@ -77,7 +77,7 @@ File: Main Css File
 }
 
 #topnav {
-  position: fixed;
+  position: float;
   right: 0;
   left: 0;
   top: 0;
@@ -99,7 +99,7 @@ File: Main Css File
 }
 
 #topnav .has-submenu.active .submenu li.active > a {
-  color: #02c0ce;
+  color: #6C737E;
 }
 
 #topnav .topbar-main .logo {
@@ -1569,8 +1569,8 @@ code {
 }
 
 .btn-custom {
-  background-color: #02c0ce;
-  border-color: #02c0ce;
+  background-color: #286F6E;
+  border-color: #286F6E;
 }
 
 .btn-custom:hover, .btn-custom:focus, .btn-custom:active, .btn-custom.active,

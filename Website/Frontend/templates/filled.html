@@ -11,6 +11,7 @@
         <link rel="shortcut icon" href="../static/images/favicon.ico">
 
         <!-- Bootstrap fileupload css -->
+        <link href="../static/plugins/spinkit/spinkit.css" rel="stylesheet" />
 
         <link href="../static/plugins/bootstrap-fileupload/bootstrap-fileupload.css" rel="stylesheet" />
         <link href="../static/plugins/dropzone/dropzone.css" rel="stylesheet" type="text/css" />
@@ -22,6 +23,26 @@
         <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <style type="text/css">
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans);
+.loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url('http://www.downgraf.com/wp-content/uploads/2014/09/01-progress.gif?e44397') 50% 50% no-repeat rgb(249,249,249);
+}
+</style>
+
+<script type="text/javascript">
+  $(window).load(function(){
+     $('.loader').fadeOut();
+});
+</script>
+
+
 
         <!-- <script src="../static/js/modernizr.min.js"></script> -->
         <style>
@@ -50,6 +71,8 @@
     </head>
 
     <body>
+      <div class="loader"></div>
+
 
         <!-- Navigation Bar-->
         <header id="topnav">
@@ -69,7 +92,7 @@
                             </li>
 
                             <li class="has-submenu">
-                                <a href="filled.html"><i class="icon-briefcase"></i>Recognition</a>
+                                <a href="{{url_for('filled')}}"><i class="icon-briefcase"></i>Recognition</a>
                             </li>
 
                             <li class="has-submenu">
@@ -89,33 +112,20 @@
         <div class="wrapper">
               <div class="container-fluid">
               <div class="row">
-                      <div class="col-12">
-                          <div class="card-box">
-                              <h4 class="header-title m-b-30">Choose/Click on Template</h4>
-
-                              <div class="row">
-                                  <div class="col-lg-3 col-xl-2">
-                                      <div class="file-man-box">
-                                  <form method="get">
-                                <div class="form-group">
-                                  {% for imagename in images %}
-                                  <div class="col-md-2 box">
-                                    <label class="btn btn-primary">
-                                      <img src={{imagename}} class="img-thumbnail img-check">
-                                      <input type="radio" name="chk1" class="hidden" autocomplete="off">
-                                    </label>
-                                  </div>
-                                  {% endfor %}
-                                </div>
-                                <div class="clearfix"></div>
-                                </form>
-                                      </div>
-                                  </div>
-                          </div>
-                      </div><!-- end col -->
-                  </div>
-                  <!-- end row -->
-              </div> <!-- end container -->
+		<!-- <form method="get"> -->
+		<div class="form-group">
+      {% for imagename in images %}
+		<div class="col-md-2 box">
+      <label class="btn btn-primary">
+        <img src={{imagename}} alt="..." class="img-thumbnail img-check">
+      <input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+    </label>
+  </div>
+    {% endfor %}
+    </div>
+		<div class="clearfix"></div>
+		<!-- </form> -->
+	</div>
           </div>
         </div>
 
@@ -131,9 +141,9 @@
                                         <div class="form-group row">
                                             <div class="col-12">
                                                 <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                    <div class="fileupload-new thumbnail">
+                                                    <!-- <div class="fileupload-new thumbnail">
                                                         <img src="../static/images/small/img-1.jpg" alt="image" />
-                                                    </div>
+                                                    </div> -->
                                                     <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 300px; max-height: 400px;"></div>
                                                     <div>
                                                         <button type="button" class="btn btn-custom btn-file">
