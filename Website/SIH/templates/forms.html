@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Smart Editor</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link href="../static/plugins/spinkit/spinkit.css" rel="stylesheet" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="../static/images/favicon.ico">
+        <link href="../static/plugins/bootstrap-xeditable/css/bootstrap-editable.css" rel="stylesheet" />
+        <!-- App css -->
+        <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="../static/css/icons.css" rel="stylesheet" type="text/css" />
+        <link href="../static/css/style.css" rel="stylesheet" type="text/css" />
+
+        <script src="../static/js/modernizr.min.js"></script>
+
+    </head>
+
+    <body>
+      
+
+
+        <!-- Navigation Bar-->
+        <header id="topnav">
+
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <div id="navigation">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu">
+                                <a href="index.html"><i class="icon-speedometer"></i>Dashboard</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="index.html"><i class="icon-layers"></i>Template</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="filled.html"><i class="icon-briefcase"></i>Recognition</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="forms.html"><i class="icon-fire"></i>Forms</a>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="database.html"><i class="icon-docs"></i>Database</a>
+                            </li>
+                        </ul>
+                        <!-- End navigation menu -->
+                    </div> <!-- end #navigation -->
+                </div> <!-- end container -->
+            </div> <!-- end navbar-custom -->
+        </header>
+        <!-- End Navigation Bar-->
+
+
+        <div class="accountbg" style="background: url('{{imagename}}');background-size: cover;"></div>
+
+        <div class="wrapper-page account-page-full">
+            <div class="card">
+                <div class="card-block">
+                    <div class="account-box">
+                        <div class="card-box p-5">
+                            <div class="text-center">
+                                 <div class="card-box">
+
+                            <p class="text-muted font-14 m-b-30">
+                            </p>
+
+
+
+                           <form action="/saveformvalues" method="POST">
+                                    {% set counter = formvalues|length %}
+                                   {% for i, key, value in formvalues %}
+                                   <div class="form-group">
+                                   <label id = {{i}} >{{key}}</label>
+                                   <input type="hidden" name={{i}} value = {{key}}>
+                                   <input type="text" value="{{value}}" name={{i + "values"}} maxlength="100">
+                                   </div>
+                                   {% endfor %}
+                                   <input type="hidden" name="counter" value={{counter}} class="form-control">
+                                   <button type="submit" class="btn btn-primary">Submit</button>
+                           </form>
+                       </div> <!-- end card-box -->
+
+
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- Footer -->
+        <!-- <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        2018 © Highdmin. - Coderthemes.com
+                    </div>
+                </div>
+            </div>
+        </footer> -->
+        <!-- End Footer -->
+
+
+        <!-- jQuery  -->
+        <script src="../static/js/jquery.min.js"></script>
+        <script src="../static/js/popper.min.js"></script>
+        <script src="../static/js/bootstrap.min.js"></script>
+        <script src="../static/js/waves.js"></script>
+        <script src="../static/js/jquery.slimscroll.js"></script>
+        <!-- App js -->
+        <script src="../static/js/jquery.core.js"></script>
+        <script src="../static/js/jquery.app.js"></script>
+
+    </body>
+</html>
