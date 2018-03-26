@@ -1,17 +1,18 @@
 import React, { Component } from "react";
-import Button from "../small_components/Button";
-import DocumentLayout from "../small_components/DocumentLayout";
+import Button from "../styled_components/Button";
+import DocumentLayout from "../styled_components/DocumentLayout";
 import "font-awesome/css/font-awesome.min.css";
-import Empty_document_svg from "../../images/Empty_document_list.svg";
-import FileSelectButton from "../small_components/FileSelectButton";
-import FileSelectText from "../small_components/FileSelectText";
+import NewDocumentSVG from "../images/New_document.svg";
+import FileSelectButton from "../styled_components/FileSelectButton";
+import FileSelectText from "../styled_components/FileSelectText";
+import { Link } from "react-router-dom";
 
 class NewDocument extends Component {
   state = {
     selectedFile: null
   };
 
-  fileSelectedHandler = evnet => {
+  fileSelectedHandler = event => {
     this.setState({
       selectedFile: event.target.files[0]
     });
@@ -31,7 +32,7 @@ class NewDocument extends Component {
           ref={fileInput => (this.fileInput = fileInput)}
         />
         <img
-          src={Empty_document_svg}
+          src={NewDocumentSVG}
           alt="logo"
           style={{ width: 400, height: 400, margin: "10px" }}
         />
@@ -43,7 +44,19 @@ class NewDocument extends Component {
 
         <FileSelectButton>
           <Button onClick={() => this.fileInput.click()}>Pick File</Button>
-          <Button onClick={this.fileUploadHandler}>Upload</Button>
+          <Button onClick={this.fileUploadHandler}>
+            <Link
+              to="/drag"
+              style={{
+                textDecoration: "none",
+                color: " #2c2d30",
+                fontWeight: 700,
+                fontSize: "14px"
+              }}
+            >
+              Upload
+            </Link>
+          </Button>
         </FileSelectButton>
       </DocumentLayout>
     );

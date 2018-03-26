@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import NewDocument from "../main_components/NewDocument";
 import EditDocument from "../main_components/EditDocument";
 import UseDocument from "../main_components/UseDocument";
+import DragDocument from "../main_components/DragDocument";
 import styled from "styled-components";
 
 const MainWrapper = styled.div`
@@ -16,6 +17,7 @@ const Main = () => (
       <Route exact path="/" component={NewDocument} />
       <Route exact path="/edit" component={EditDocument} />
       <Route exact path="/use" component={UseDocument} />
+      <Route exact path="/drag" component={DragDocument} />
     </Switch>
   </MainWrapper>
 );

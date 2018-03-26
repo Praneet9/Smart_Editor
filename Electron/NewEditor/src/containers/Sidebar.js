@@ -57,6 +57,7 @@ const SidebarButton = styled.button`
   user-select: none;
   text-decoration: none;
   cursor: pointer;
+  outline: none;
 `;
 
 const SidebarLink = {

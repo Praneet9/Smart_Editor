@@ -19,7 +19,7 @@ const FormHeader = styled.div`
   background: ${Color.header.BACKGROUND_COLOR};
   align-items: center;
   height: 100%;
-  box-shadow: 1px 1px 0 0 0 #e8;
+  box-shadow: 1px 1px 0 0 0 #e8e8e8;
 `;
 
 const FormNameHeader = styled.div`
