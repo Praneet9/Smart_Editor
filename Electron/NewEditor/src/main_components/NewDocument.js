@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Button from "../styled_components/Button";
 import DocumentLayout from "../styled_components/DocumentLayout";
 import "font-awesome/css/font-awesome.min.css";
-import NewDocumentSVG from "../images/New_document.svg";
+import NewDocumentSVG from "../images/New-document.svg";
 import FileSelectButton from "../styled_components/FileSelectButton";
 import FileSelectText from "../styled_components/FileSelectText";
 import { Link } from "react-router-dom";
@@ -21,6 +21,11 @@ class NewDocument extends Component {
   fileUploadHandler = () => {
     console.log(`Selected file: ${this.state.selectedFile.name}`);
   };
+
+  fileSelectAndRender = () => {
+    this.foo.toogle();
+  
+  }
 
   render() {
     return (
@@ -44,7 +49,20 @@ class NewDocument extends Component {
 
         <FileSelectButton>
           <Button onClick={() => this.fileInput.click()}>Pick File</Button>
-          <Button onClick={this.fileUploadHandler}>
+          {/* <Button onClick={this.fileUploadHandler}>
+            <Link
+              to="/drag"
+              style={{
+                textDecoration: "none",
+                color: " #2c2d30",
+                fontWeight: 700,
+                fontSize: "14px"
+              }}
+            >
+              Upload
+            </Link>
+          </Button> */}
+          <Button onClick={this.fileSelectAndRender.bind(this)}>
             <Link
               to="/drag"
               style={{
