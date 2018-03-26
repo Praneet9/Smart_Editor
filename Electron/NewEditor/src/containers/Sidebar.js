@@ -84,6 +84,9 @@ const Sidebar = () => (
         <Link to="/use" style={SidebarLink}>
           <SidebarLi>Use</SidebarLi>
         </Link>
+        <Link to="/crop" style={SidebarLink}>
+          <SidebarLi>Crop</SidebarLi>
+        </Link>
       </SidebarUl>
     </SidebarDiv>
   </SidebarWrapper>
