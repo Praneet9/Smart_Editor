@@ -60,6 +60,17 @@ const SidebarButton = styled.button`
   outline: none;
 `;
 
+const SidebarHeading = styled.div`
+  padding: 16px 86px 0px 15px;
+  margin: 0;
+  height: 26px;
+  display: flex;
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #a9a9a9;
+`;
+
 const SidebarLink = {
   color: Color.sidebar.FONT_COLOR,
   textDecoration: "none"
@@ -76,13 +87,73 @@ const Sidebar = () => (
     <SidebarDiv>
       <SidebarUl>
         <Link to="/" style={SidebarLink}>
-          <SidebarLi>New</SidebarLi>
+          <SidebarLi>
+            <i
+              className="far fa-file"
+              style={{
+                marginRight: "14px",
+                marginBottom: "8px",
+                marginLeft: "1px"
+              }}
+            />
+            New
+          </SidebarLi>
         </Link>
         <Link to="/edit" style={SidebarLink}>
-          <SidebarLi>Edit</SidebarLi>
+          <SidebarLi>
+            <i
+              className="far fa-edit"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Edit
+          </SidebarLi>
         </Link>
         <Link to="/use" style={SidebarLink}>
-          <SidebarLi>Use</SidebarLi>
+          <SidebarLi>
+            <i
+              className="far fa-thumbs-up"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Use
+          </SidebarLi>
+        </Link>
+      </SidebarUl>
+    </SidebarDiv>
+
+    <SidebarHeading>Share</SidebarHeading>
+
+    <SidebarDiv>
+      <SidebarUl>
+        <Link to="/" style={SidebarLink}>
+          <SidebarLi>
+            <i
+              className="far fa-file"
+              style={{
+                marginRight: "14px",
+                marginBottom: "8px",
+                marginLeft: "1px"
+              }}
+            />
+            New
+          </SidebarLi>
+        </Link>
+        <Link to="/edit" style={SidebarLink}>
+          <SidebarLi>
+            <i
+              className="far fa-edit"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Edit
+          </SidebarLi>
+        </Link>
+        <Link to="/use" style={SidebarLink}>
+          <SidebarLi>
+            <i
+              className="far fa-thumbs-up"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Use
+          </SidebarLi>
         </Link>
       </SidebarUl>
     </SidebarDiv>
