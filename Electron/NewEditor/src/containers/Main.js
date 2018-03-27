@@ -15,11 +15,11 @@ const MainWrapper = styled.div`
 const Main = () => (
   <MainWrapper>
     <Switch>
-      <Route exact path="/" component={NewDocument} />
+      <Route exact path="/" component={crop} />
       <Route exact path="/edit" component={EditDocument} />
       <Route exact path="/use" component={UseDocument} />
-      <Route exact path="/drag" component={DragDocument} />
-      <Route exact path="/crop" component={crop} />
+      {/* <Route exact path="/drag" component={DragDocument} /> */}
+      {/* <Route exact path="/crop" component={crop} /> */}
     </Switch>
   </MainWrapper>
 );

@@ -6,6 +6,12 @@ const jQuery = window.jQuery;
 
 class crop extends Component{
 
+  state = {
+    regions: [],
+    file: "",
+    imagePreviewUrl: ""
+  };
+
   componentDidMount() {
 
     console.log(window.$);
@@ -96,31 +102,55 @@ class crop extends Component{
     });
     output(text);
   };
-  	}
+}
+
+  _handleImageChange(e) {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      this.setState({
+        file: file,
+        imagePreviewUrl: reader.result
+      });
+    };
+
+    reader.readAsDataURL(file);
+  }
 
   render(){
+    let { imagePreviewUrl } = this.state;
     return(
       <div id="wrapper">
 			<h1>jQuery Select Areas Plugin Demos</h1>
 
-			<div class="image-decorator">
-				<img alt="Image principale" id="example" src="http://via.placeholder.com/350x150"/>
+        <input
+          type="file"
+          onChange={e => this._handleImageChange(e)}
+        />
+
+			<div className="image-decorator">
+				<img alt="Image principale" id="example" src={imagePreviewUrl} style={{width: '500px', height: '500px'}}/>
 			</div>
 			<table>
+        <tbody>
 				<tr>
-					<td class="actions">
-						<input type="button" id="btnView" value="Display areas" class="actionOn" />
-						<input type="button" id="btnViewRel" value="Display relative" class="actionOn" />
-						<input type="button" id="btnNew" value="Add New" class="actionOn" />
-						<input type="button" id="btnNews" value="Add 2 New" class="actionOn" />
-						<input type="button" id="btnReset" value="Reset" class="actionOn" />
-						<input type="button" id="btnDestroy" value="Destroy" class="actionOn" />
-						<input type="button" id="btnCreate" value="Create" class="actionOff" />
+					<td className="actions">
+						<input type="button" id="btnView" value="Display areas" className="actionOn" />
+						<input type="button" id="btnViewRel" value="Display relative" className="actionOn" />
+						<input type="button" id="btnNew" value="Add New" className="actionOn" />
+						<input type="button" id="btnNews" value="Add 2 New" className="actionOn" />
+						<input type="button" id="btnReset" value="Reset" className="actionOn" />
+						<input type="button" id="btnDestroy" value="Destroy" className="actionOn" />
+						<input type="button" id="btnCreate" value="Create" className="actionOff" />
 					</td>
 					<td>
 						<div id="output" class='output'> </div>
 					</td>
 				</tr>
+        </tbody>
 			</table>
 		</div>
     );

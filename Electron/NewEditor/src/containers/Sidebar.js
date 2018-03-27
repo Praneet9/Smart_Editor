@@ -16,6 +16,8 @@ const SidebarWrapper = styled.div`
 
 const SidebarDiv = styled.div`
   width: 100%;
+  padding: 0;
+  margin: 0;
 `;
 const SidebarUl = styled.ul`
   outline: none;
@@ -66,9 +68,9 @@ const SidebarHeading = styled.div`
   height: 26px;
   display: flex;
   font-size: 18px;
-  line-height: 20px;
+  line-height: 18px;
   font-weight: 400;
-  color: #a9a9a9;
+  color: #707070;
 `;
 
 const SidebarLink = {
@@ -112,7 +114,7 @@ const Sidebar = () => (
           <SidebarLi>
             <i
               className="far fa-thumbs-up"
-              style={{ marginRight: "10px", marginBottom: "8px" }}
+              style={{ marginRight: "10px"}}
             />
             Use
           </SidebarLi>
@@ -126,33 +128,19 @@ const Sidebar = () => (
       <SidebarUl>
         <Link to="/" style={SidebarLink}>
           <SidebarLi>
-            <i
-              className="far fa-file"
-              style={{
-                marginRight: "14px",
+            <i className="far fa-envelope"  
+            style={{
+                marginRight: "10px",
                 marginBottom: "8px",
                 marginLeft: "1px"
-              }}
-            />
-            New
+              }}></i>
+            Mail
           </SidebarLi>
         </Link>
         <Link to="/edit" style={SidebarLink}>
           <SidebarLi>
-            <i
-              className="far fa-edit"
-              style={{ marginRight: "10px", marginBottom: "8px" }}
-            />
-            Edit
-          </SidebarLi>
-        </Link>
-        <Link to="/use" style={SidebarLink}>
-          <SidebarLi>
-            <i
-              className="far fa-thumbs-up"
-              style={{ marginRight: "10px", marginBottom: "8px" }}
-            />
-            Use
+            <i className="fab fa-google-drive" style={{ marginRight: "10px", marginBottom: "8px" }}></i>
+            Drive
           </SidebarLi>
         </Link>
         <Link to="/crop" style={SidebarLink}>
