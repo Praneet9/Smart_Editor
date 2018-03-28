@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Button from "../styled_components/Button";
+import FileSelectButton from "../styled_components/FileSelectButton";
 
 const $ = window.$;
 // const jQuery = window.jQuery;
@@ -183,6 +185,9 @@ export default class DragThisDocument extends Component {
             </tr>
           </tbody>
         </table> */}
+        <FileSelectButton>
+        <Button onClick={() => this.fileInput.click()}>Submit</Button>;  
+        </FileSelectButton>
       </div>
     );
   }
