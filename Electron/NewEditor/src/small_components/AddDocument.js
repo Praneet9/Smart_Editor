@@ -75,7 +75,7 @@ export default class AddDocument extends Component {
         </div>
       );
 
-      btn = <Button onClick={this.callTwoFunctions}>Upload</Button>;
+      btn = <Button onClick={this.passImagePreviewUrlToParent}>Upload</Button>;
     } else {
       image = (
         <img
