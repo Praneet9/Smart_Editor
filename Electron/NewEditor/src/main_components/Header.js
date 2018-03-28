@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-// import { Header } from "semantic-ui-react";
 import Color from "../utils/Color";
 import "font-awesome/css/font-awesome.min.css";
 

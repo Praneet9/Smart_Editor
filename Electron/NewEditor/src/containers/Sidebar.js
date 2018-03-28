@@ -112,10 +112,7 @@ const Sidebar = () => (
         </Link>
         <Link to="/use" style={SidebarLink}>
           <SidebarLi>
-            <i
-              className="far fa-thumbs-up"
-              style={{ marginRight: "10px"}}
-            />
+            <i className="far fa-thumbs-up" style={{ marginRight: "10px" }} />
             Use
           </SidebarLi>
         </Link>
@@ -128,23 +125,25 @@ const Sidebar = () => (
       <SidebarUl>
         <Link to="/" style={SidebarLink}>
           <SidebarLi>
-            <i className="far fa-envelope"  
-            style={{
+            <i
+              className="far fa-envelope"
+              style={{
                 marginRight: "10px",
                 marginBottom: "8px",
                 marginLeft: "1px"
-              }}></i>
+              }}
+            />
             Mail
           </SidebarLi>
         </Link>
         <Link to="/edit" style={SidebarLink}>
           <SidebarLi>
-            <i className="fab fa-google-drive" style={{ marginRight: "10px", marginBottom: "8px" }}></i>
+            <i
+              className="fab fa-google-drive"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
             Drive
           </SidebarLi>
-        </Link>
-        <Link to="/crop" style={SidebarLink}>
-          <SidebarLi>Crop</SidebarLi>
         </Link>
       </SidebarUl>
     </SidebarDiv>
