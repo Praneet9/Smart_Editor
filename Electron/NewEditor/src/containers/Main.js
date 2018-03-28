@@ -10,14 +10,25 @@ const MainWrapper = styled.div`
   grid-column: 2/3;
 `;
 
-const Main = () => (
-  <MainWrapper>
-    <Switch>
-      <Route exact path="/" component={MainDocument} />
-      <Route exact path="/edit" component={EditDocument} />
-      <Route exact path="/use" component={UseDocument} />
-    </Switch>
-  </MainWrapper>
-);
+const Main = () => {
+  const getHeaderFormName = filename => {
+    console.log(filename);
+  };
+
+  return (
+    <MainWrapper>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          component={MainDocument}
+          headerFormName={getHeaderFormName}
+        />
+        <Route exact path="/edit" component={EditDocument} />
+        <Route exact path="/use" component={UseDocument} />
+      </Switch>
+    </MainWrapper>
+  );
+};
 
 export default Main;

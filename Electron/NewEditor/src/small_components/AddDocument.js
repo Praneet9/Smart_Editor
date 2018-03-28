@@ -3,7 +3,7 @@ import Button from "../styled_components/Button";
 import DocumentLayout from "../styled_components/DocumentLayout";
 import "font-awesome/css/font-awesome.min.css";
 import NewDocumentSVG from "../images/New-document.svg";
-import FileSelectButton from "../styled_components/FileSelectButton";
+// import FileSelectButton from "../styled_components/FileSelectButton";
 import FileSelectText from "../styled_components/FileSelectText";
 
 export default class AddDocument extends Component {
@@ -34,10 +34,21 @@ export default class AddDocument extends Component {
     reader.readAsDataURL(file);
   }
 
+  callTwoFunctions = event => {
+    console.log("callTwoFunctions");
+    this.passImagePreviewUrlToParent;
+    this.getHeaderFormName;
+  };
+
   passImagePreviewUrlToParent = () => {
     console.log("inside passImagePreviewUrlToParent");
     let { imagePreviewUrl } = this.state;
     this.props.getImagePreviewUrl(imagePreviewUrl);
+  };
+
+  getHeaderFormName = () => {
+    let { file } = this.state;
+    this.props.headerFormName(file.name);
   };
 
   render() {
@@ -64,7 +75,7 @@ export default class AddDocument extends Component {
         </div>
       );
 
-      btn = <Button onClick={this.passImagePreviewUrlToParent}>Upload</Button>;
+      btn = <Button onClick={this.callTwoFunctions}>Upload</Button>;
     } else {
       image = (
         <img
@@ -101,7 +112,6 @@ export default class AddDocument extends Component {
         {filename}
 
         {btn}
-
       </DocumentLayout>
     );
   }
