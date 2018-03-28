@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-// import { Header } from "semantic-ui-react";
 import Color from "../utils/Color";
 import "font-awesome/css/font-awesome.min.css";
 
@@ -19,7 +18,7 @@ const FormHeader = styled.div`
   background: ${Color.header.BACKGROUND_COLOR};
   align-items: center;
   height: 100%;
-  box-shadow: 1px 1px 0 0 0 #e8;
+  box-shadow: 1px 1px 0 0 0 #e8e8e8;
 `;
 
 const FormNameHeader = styled.div`

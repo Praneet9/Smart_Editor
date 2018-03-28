@@ -16,6 +16,8 @@ const SidebarWrapper = styled.div`
 
 const SidebarDiv = styled.div`
   width: 100%;
+  padding: 0;
+  margin: 0;
 `;
 const SidebarUl = styled.ul`
   outline: none;
@@ -57,6 +59,18 @@ const SidebarButton = styled.button`
   user-select: none;
   text-decoration: none;
   cursor: pointer;
+  outline: none;
+`;
+
+const SidebarHeading = styled.div`
+  padding: 16px 86px 0px 15px;
+  margin: 0;
+  height: 26px;
+  display: flex;
+  font-size: 18px;
+  line-height: 18px;
+  font-weight: 400;
+  color: #707070;
 `;
 
 const SidebarLink = {
@@ -75,13 +89,61 @@ const Sidebar = () => (
     <SidebarDiv>
       <SidebarUl>
         <Link to="/" style={SidebarLink}>
-          <SidebarLi>New</SidebarLi>
+          <SidebarLi>
+            <i
+              className="far fa-file"
+              style={{
+                marginRight: "14px",
+                marginBottom: "8px",
+                marginLeft: "1px"
+              }}
+            />
+            New
+          </SidebarLi>
         </Link>
         <Link to="/edit" style={SidebarLink}>
-          <SidebarLi>Edit</SidebarLi>
+          <SidebarLi>
+            <i
+              className="far fa-edit"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Edit
+          </SidebarLi>
         </Link>
         <Link to="/use" style={SidebarLink}>
-          <SidebarLi>Use</SidebarLi>
+          <SidebarLi>
+            <i className="far fa-thumbs-up" style={{ marginRight: "10px" }} />
+            Use
+          </SidebarLi>
+        </Link>
+      </SidebarUl>
+    </SidebarDiv>
+
+    <SidebarHeading>Share</SidebarHeading>
+
+    <SidebarDiv>
+      <SidebarUl>
+        <Link to="/" style={SidebarLink}>
+          <SidebarLi>
+            <i
+              className="far fa-envelope"
+              style={{
+                marginRight: "10px",
+                marginBottom: "8px",
+                marginLeft: "1px"
+              }}
+            />
+            Mail
+          </SidebarLi>
+        </Link>
+        <Link to="/edit" style={SidebarLink}>
+          <SidebarLi>
+            <i
+              className="fab fa-google-drive"
+              style={{ marginRight: "10px", marginBottom: "8px" }}
+            />
+            Drive
+          </SidebarLi>
         </Link>
       </SidebarUl>
     </SidebarDiv>
