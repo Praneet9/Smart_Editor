@@ -12,9 +12,7 @@ const MainWrapper = styled.div`
 `;
 
 const Main = () => {
-  const getHeaderFormName = filename => {
-    console.log(filename);
-  };
+
 
   return (
     <MainWrapper>
@@ -23,7 +21,6 @@ const Main = () => {
           exact
           path="/"
           component={MainDocument}
-          headerFormName={getHeaderFormName}
         />
         <Route exact path="/edit" component={EditDocument} />
         <Route exact path="/use" component={UseDocument} />

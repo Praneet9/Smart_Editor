@@ -1,6 +1,9 @@
+import React, { Component } from "react";
 import styled from "styled-components";
 import Color from "../utils/Color";
-import React, { Component } from "react";
+import BlankTemplates from '../small_components/BlankTemplates'
+import { Switch, Route } from "react-router-dom";
+
 
 // const SubsidebarWrapper = styled.div`
 //   grid-column: 3/4;
@@ -101,15 +104,36 @@ const SubsidebarCloseButton = styled.button`
 // };
 
 class Subsidebar extends Component {
-  // state = {
-  //   sidebarOpen: true
-  // };
+  state = {
+    data: ''
+  };
 
   // closeSubSidebarHandler = () => {
   //   console.log("click");
   // };
 
+
+  templateData = tdata => {
+      this.setState({data : tdata })
+      // this.sidebarData
+      
+  }
+
+  sidebarData()  {
+    console.log('inside sidebaeData')
+    this.props.getSidebarDataFromSubSidebar(this.state.data)
+  }
+
+  componentDidMount() {
+    console.log('inside componentDidMount')
+    this.sidebarData
+  }
+  
+
   render() {
+
+    console.log(`${this.state.data}`);
+
     return (
       // <SubsidebarWrapper>
       <div id="mydiv" style={SubsidebarWrapper} className="subsidebar">
@@ -131,6 +155,12 @@ class Subsidebar extends Component {
             </SubsidebarCloseButton>
           </DocumentListHeadingRow>
         </DocumentListHeading>
+
+
+        <BlankTemplates getTemplateData={this.templateData} />
+        
+        
+
       </div>
 
       // </SubsidebarWrapper>
