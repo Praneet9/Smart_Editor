@@ -1,21 +1,27 @@
 import React, { Component } from "react";
 import DocumentLayout from "../styled_components/DocumentLayout";
 import AddDocument from "../small_components/AddDocument";
-import DragThisDocument from "../small_components/DragThisDocument";
+import DragAndShowLables from '../small_components/DragAndShowLables';
 
 export default class MainDocument extends Component {
   state = {
-    imagePreviewUrl: ""
+    imagePreviewUrl: "",
   };
 
-  passImagePreviewUrlToParent = imagedata => {
-    this.setState({ imagePreviewUrl: imagedata });
+  passImagePreviewUrlToParent = imagedata=> {
+    this.setState({ imagePreviewUrl: imagedata});
   };
+
+
+
   render() {
     let whatToShow = null;
     if (this.state.imagePreviewUrl) {
       whatToShow = (
-        <DragThisDocument setImagePreivewUrl={this.state.imagePreviewUrl} />
+        // <DragThisDocument
+        //     setImagePreivewUrl={this.state.imagePreviewUrl}
+        // />
+         <DragAndShowLables setImagePreivewUrl={this.state.imagePreviewUrl}/>   
       );
     } else {
       whatToShow = (
@@ -23,5 +29,10 @@ export default class MainDocument extends Component {
       );
     }
     return <DocumentLayout>{whatToShow}</DocumentLayout>;
+
+
+
+
+
   }
 }

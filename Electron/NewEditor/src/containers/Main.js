@@ -4,6 +4,7 @@ import styled from "styled-components";
 import EditDocument from "../main_components/EditDocument";
 import UseDocument from "../main_components/UseDocument";
 import MainDocument from "../main_components/MainDocument";
+import ShowLables from "../small_components/ShowLables";
 
 const MainWrapper = styled.div`
   display: grid;
@@ -26,6 +27,7 @@ const Main = () => {
         />
         <Route exact path="/edit" component={EditDocument} />
         <Route exact path="/use" component={UseDocument} />
+        <Route exact path="/showlabelÍ" component={ShowLables} />
       </Switch>
     </MainWrapper>
   );

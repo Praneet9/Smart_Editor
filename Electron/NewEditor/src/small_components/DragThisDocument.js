@@ -119,6 +119,11 @@ export default class DragThisDocument extends Component {
     }
   }
 
+  insideDragAndShow = () => {
+    console.log('inside insideDragAndShow');
+    this.props.insideDragThisDocument();
+  }
+
   render() {
     let imagePreviewUrl = this.props.setImagePreivewUrl;
 
@@ -186,7 +191,14 @@ export default class DragThisDocument extends Component {
           </tbody>
         </table> */}
         <FileSelectButton>
-        <Button onClick={() => this.fileInput.click()}>Submit</Button>;  
+        <input
+          type="button"
+          id="btnViewRel"
+          value="Display relative"
+          className="actionOn"
+          style={{display: "none"}}
+        />
+        <Button onClick={this.insideDragAndShow}>Submit</Button>
         </FileSelectButton>
       </div>
     );

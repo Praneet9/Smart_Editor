@@ -34,22 +34,27 @@ export default class AddDocument extends Component {
     reader.readAsDataURL(file);
   }
 
-  callTwoFunctions = event => {
-    console.log("callTwoFunctions");
-    this.passImagePreviewUrlToParent;
-    this.getHeaderFormName;
-  };
+  // callTwoFunctions = event => {
+  //   console.log("callTwoFunctions");
+  //   this.passImagePreviewUrlToParent;
+  //   this.getHeaderFormName;
+  // };
 
   passImagePreviewUrlToParent = () => {
     console.log("inside passImagePreviewUrlToParent");
     let { imagePreviewUrl } = this.state;
+
+    // this.props.getImagePreviewUrl({
+    //   imagedata: imagePreviewUrl,
+    //   handle: true
+    // });
     this.props.getImagePreviewUrl(imagePreviewUrl);
   };
 
-  getHeaderFormName = () => {
-    let { file } = this.state;
-    this.props.headerFormName(file.name);
-  };
+  // getHeaderFormName = () => {
+  //   let { file } = this.state;
+  //   this.props.headerFormName(file.name);
+  // };
 
   render() {
     let filename = null;

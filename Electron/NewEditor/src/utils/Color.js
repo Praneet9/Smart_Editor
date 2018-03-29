@@ -13,7 +13,7 @@ const Color = {
     SUBFONT_COLOR: "#717274"
   },
   button: {
-    BACKGROUND_COLOR: "#e4e4e4ßß"
+    BACKGROUND_COLOR: "#e4e4e4"
   }
 };
 
