@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Button from "../styled_components/Button";
+import FileSelectButton from "../styled_components/FileSelectButton";
 
 const $ = window.$;
 // const jQuery = window.jQuery;
@@ -11,7 +13,7 @@ export default class DragThisDocument extends Component {
       $("img#example").selectAreas({
         minSize: [10, 10],
         onChanged: debugQtyAreas,
-        width: 700
+        width: 500
       });
       $("#btnView").click(function() {
         var areas = $("img#example").selectAreas("areas");
@@ -117,6 +119,11 @@ export default class DragThisDocument extends Component {
     }
   }
 
+  insideDragAndShow = () => {
+    console.log('inside insideDragAndShow');
+    this.props.insideDragThisDocument();
+  }
+
   render() {
     let imagePreviewUrl = this.props.setImagePreivewUrl;
 
@@ -126,9 +133,9 @@ export default class DragThisDocument extends Component {
           src={imagePreviewUrl}
           alt="logo"
           id="example"
-          style={{ width: 400, height: 400, margin: "10px" }}
+          // style={{ width: 400, height: 400, margin: "10px" }}
         />
-        <table>
+        {/* <table>
           <tbody>
             <tr>
               <td className="actions">
@@ -182,7 +189,17 @@ export default class DragThisDocument extends Component {
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> */}
+        <FileSelectButton>
+        <input
+          type="button"
+          id="btnViewRel"
+          value="Display relative"
+          className="actionOn"
+          style={{display: "none"}}
+        />
+        <Button onClick={this.insideDragAndShow}>Submit</Button>
+        </FileSelectButton>
       </div>
     );
   }

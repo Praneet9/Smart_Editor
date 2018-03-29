@@ -1,6 +1,6 @@
-.select-areas-overlay {
+/* .select-areas-overlay {
 	background: none;
-}
+} */
 .select-areas-outline {
 	background: none;
 	visibility: hidden;
@@ -11,7 +11,7 @@
 .select-areas-background-area {
 	background: none !important;
 	margin: -1px 0 0 -1px;
-	border: 2px solid green;
+	border: 2px dotted green;
 }
 /* .blurred {
 	filter: none;
