@@ -52,7 +52,6 @@ export default class AddDocument extends Component {
 
 
   render() {
-    console.log(this.state.file)
     let filename = null;
     let image = null;
     let { imagePreviewUrl } = this.state;

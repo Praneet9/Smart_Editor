@@ -114,25 +114,27 @@ class Subsidebar extends Component {
 
 
   templateData = tdata => {
+    console.log('inside templateData')
       this.setState({data : tdata })
-      // this.sidebarData
-      
   }
 
-  sidebarData()  {
-    console.log('inside sidebaeData')
-    this.props.getSidebarDataFromSubSidebar(this.state.data)
+  sidebarData = () => {
+    let { data } = this.state
+    this.props.getSidebarDataFromSubSidebar(data)
   }
 
   componentDidMount() {
     console.log('inside componentDidMount')
-    this.sidebarData
+    console.log(this.state.data)
   }
   
-
+  
+  
+  
   render() {
-
+    
     console.log(`${this.state.data}`);
+        
 
     return (
       // <SubsidebarWrapper>
@@ -155,8 +157,9 @@ class Subsidebar extends Component {
             </SubsidebarCloseButton>
           </DocumentListHeadingRow>
         </DocumentListHeading>
-
-
+  
+       <button onClick={this.sidebarData} style={{margin : '6px'}}>Confirm your blank form</button>
+   
         <BlankTemplates getTemplateData={this.templateData} />
         
         

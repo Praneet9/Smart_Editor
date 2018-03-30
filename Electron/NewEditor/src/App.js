@@ -15,14 +15,18 @@ class App extends Component {
     this.setState({data: thisIsSidebarData})
   }
 
+  componentDidMount() {
+    console.log(this.state.data)
+  }
+
   render() {
-    console.log(this.state.data);
+  console.log(this.state.data);
   return (
     <BrowserRouter>
       <AppLayout>
         <Sidebar />
         <Header documentName="Form Name" />
-        <Main />
+        <Main sendTemplateDataToMain={this.state.data}/>
         <SubSidebar getSidebarDataFromSubSidebar={this.sidebarData}/>
       </AppLayout>
     </BrowserRouter>
