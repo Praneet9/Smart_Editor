@@ -16,7 +16,7 @@ def getDB(client):
     return db
 
 def getCollection(collection_name, db):
-    collection = db.collection_name
+    collection = db[collection_name]
     return collection
 
 def closeConnection(client):

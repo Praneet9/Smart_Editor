@@ -47,7 +47,7 @@
         <div class="form-name-header">
           <div class="header-left">
             <div class="form-name-container">
-              Form Name
+              <span id="form-name"></span>
             </div>
             <div class="form-details">
               Modified at
@@ -58,10 +58,25 @@
     </div>
     <!-- Main -->
     <div class="main">
-      <div id="add-new-template" class="main">Create</div>
+      <form action="/pdftoimage" method="POST" enctype=multipart/form-data >
+      <div id="add-new-template" class="main-container">
+        <img src="../static/images/New-document.svg" alt="Empty SVG" width="400px" height="400px">
+        <span class="file-select-text">Click on pick file, to select new blank form</span>
+        <input type="file" accept="application/pdf" class="button" id="pdf-file"/>
+        <buton type='submit' class="button" typ>Submit blank template</buton>
+      </div>
+    </form>
     </div>
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 </body>
 
+<!-- <script>
+  function selectThisPdf() {
+    let filepath = document.getElementById('pdf-file').value;
+    console.log(`Filepath: ${filepath}`);
+    document.getElementById('form-name').innerText = filepath
+  }
+</script>
+ -->
 </html>
