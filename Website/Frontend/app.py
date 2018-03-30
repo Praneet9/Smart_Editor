@@ -80,7 +80,7 @@ def getTags():
     #print(datalist)
     return render_template('render.html', imagename = imagename, datalist = datalist)
 
-@app.route('/something', methods=['POST'])
+@app.route('/confirmedLabels', methods=['POST'])
 def save_labels():
     temp_dict = {'imagename': request.form.get('imagename')}
     counter = int(request.form.get('counter'))
