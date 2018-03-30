@@ -15,6 +15,7 @@ export default class MainDocument extends Component {
 
 
   render() {
+
     let whatToShow = null;
     if (this.state.imagePreviewUrl) {
       whatToShow = (

@@ -34,27 +34,25 @@ export default class AddDocument extends Component {
     reader.readAsDataURL(file);
   }
 
-  // callTwoFunctions = event => {
-  //   console.log("callTwoFunctions");
-  //   this.passImagePreviewUrlToParent;
-  //   this.getHeaderFormName;
-  // };
-
   passImagePreviewUrlToParent = () => {
     console.log("inside passImagePreviewUrlToParent");
     let { imagePreviewUrl } = this.state;
-
-    // this.props.getImagePreviewUrl({
-    //   imagedata: imagePreviewUrl,
-    //   handle: true
-    // });
     this.props.getImagePreviewUrl(imagePreviewUrl);
+
+
+    // fetch
+    fetch("http://localhost:5000/file", {
+      method: 'POST',
+      body: this.state.file,
+      headers: new Headers({
+    'Content-Type': 'multipart/form-data'
+  })
+    }).then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+
   };
 
-  // getHeaderFormName = () => {
-  //   let { file } = this.state;
-  //   this.props.headerFormName(file.name);
-  // };
 
   render() {
     let filename = null;
@@ -110,6 +108,7 @@ export default class AddDocument extends Component {
           onChange={e => this._handleImageChange(e)}
           style={{ display: "none" }}
           ref={fileInput => (this.fileInput = fileInput)}
+          name='file'
         />
 
         {image}

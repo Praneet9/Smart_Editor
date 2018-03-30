@@ -19,6 +19,12 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/file', methods=['POST'])
+def asd():
+    print('asdadsad')
+    pdffile = request.files['file']
+    print(secure_filename(pdffile.filename))
+
 @app.route('/pdftoimage', methods=['POST'])
 def pdftoimage():
     time = str(datetime.now())
