@@ -1,36 +1,36 @@
 from flask import Flask, render_template, request, jsonify
-from PythonMagick import Image
-import PythonMagick
-from pymongo import MongoClient
-from datetime import datetime
-from werkzeug.utils import secure_filename
-import pytesseract as tesseract
-import os
-import cv2
-import numpy as np
-import ast
-import string
-import re
-from keras.preprocessing import image as im
-from keras import backend as k
-import tensorflow as tf
-from keras.models import load_model, model_from_json
-tf.reset_default_graph()
-import Helping_Libraries.spell_corrector as sc
-import Helping_Libraries.word_segmentor as ws
-
-
-label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
-                    11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
-                    21: 'n', 22: 'q', 23: 'r', 24: 't', 25: 'y', 26: 'A', 27: 'B', 28: 'C', 29: 'D', 30: 'E',
-                    31: 'F', 32: 'G', 33: 'H', 34: 'I', 35: 'J', 36: 'K', 37: 'L', 38: 'M', 39: 'N', 40: 'O',
-                    41: 'P', 42: 'Q', 43: 'R', 44: 'S', 45: 'T', 46: 'U', 47: 'V', 48: 'W', 49: 'X', 50: 'Y',
-                    51: 'Z'}
-
-client = MongoClient('localhost:27017')
-db = client.smart_editor
-nonfilled_collection = db.non_filled
-filled_collection = db.filled
+# from PythonMagick import Image
+# import PythonMagick
+# from pymongo import MongoClient
+# from datetime import datetime
+# from werkzeug.utils import secure_filename
+# import pytesseract as tesseract
+# import os
+# import cv2
+# import numpy as np
+# import ast
+# import string
+# import re
+# from keras.preprocessing import image as im
+# from keras import backend as k
+# import tensorflow as tf
+# from keras.models import load_model, model_from_json
+# tf.reset_default_graph()
+# import Helping_Libraries.spell_corrector as sc
+# import Helping_Libraries.word_segmentor as ws
+#
+#
+# label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
+#                     11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
+#                     21: 'n', 22: 'q', 23: 'r', 24: 't', 25: 'y', 26: 'A', 27: 'B', 28: 'C', 29: 'D', 30: 'E',
+#                     31: 'F', 32: 'G', 33: 'H', 34: 'I', 35: 'J', 36: 'K', 37: 'L', 38: 'M', 39: 'N', 40: 'O',
+#                     41: 'P', 42: 'Q', 43: 'R', 44: 'S', 45: 'T', 46: 'U', 47: 'V', 48: 'W', 49: 'X', 50: 'Y',
+#                     51: 'Z'}
+#
+# client = MongoClient('localhost:27017')
+# db = client.smart_editor
+# nonfilled_collection = db.non_filled
+# filled_collection = db.filled
 
 app = Flask(__name__)
 
@@ -266,7 +266,7 @@ def ocrit(image):
                 #cv2.destroyAllWindows()
                 #print(charac.shape)
                 character = prediction(charac)
-                
+
                 character_list.append(character)
                 #print('OCRit',character)
             word_list.append("".join(character_list))
@@ -320,6 +320,12 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilat
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/file', methods=['POST'])
+def asd():
+    print('asdadsad')
+    pdffile = request.files['file']
+    print(secure_filename(pdffile.filename))
 
 @app.route('/pdftoimage', methods=['POST'])
 def pdftoimage():
