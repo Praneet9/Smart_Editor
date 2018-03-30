@@ -42,7 +42,7 @@ const SidebarLi = styled.li`
 
 const SidebarButton = styled.button`
   font-size: 14px;
-  padding: 5px 18px;
+  padding: 5px 18px 20px 5px;
   background: #f9f9f9;
   color: #2c2d30 !important;
   font-weight: 700;
