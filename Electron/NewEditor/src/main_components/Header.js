@@ -142,6 +142,7 @@ const SearchInput = styled.div`
 export default ({ documentName }) => (
   <HeaderWrapper>
     <FormHeader>
+      
       <FormNameHeader>
         {/* left */}
         <HeaderLeft>

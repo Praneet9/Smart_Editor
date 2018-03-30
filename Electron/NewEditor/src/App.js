@@ -19,6 +19,7 @@ class App extends Component {
     console.log(this.state.data)
   }
 
+
   render() {
   console.log(this.state.data);
   return (
