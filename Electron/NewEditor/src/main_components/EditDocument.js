@@ -62,6 +62,8 @@ export default class AddDocument extends Component {
     let { imagePreviewUrl } = this.state;
     let btn = null;
 
+    console.log(this.props.sendTemplateDataToEditDocument);
+
     if (this.state.file && this.state.imagePreviewUrl) {
       image = (
         <img
