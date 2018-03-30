@@ -7,6 +7,9 @@ from keras.preprocessing import image as im
 from keras import backend as k
 import Helping_Libraries.spell_corrector as sc
 import Helping_Libraries.word_segmentor as ws
+import re
+import ast
+
 
 label_dictionary = {0: '0', 1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: 'a',
                     11: 'b', 12: 'd', 13: 'e', 14: 'f', 15: 'g', 16: 'h', 17: 'i', 18: 'j', 19: 'l', 20: 'm',
@@ -179,7 +182,7 @@ def ocrit(image, model):
             word_edges = cv2.Canny(word, 30, 150)
 
             # dilating word to detect individual characters
-            kernel_char = np.ones((15, 5), np.uint8)
+            kernel_char = np.ones((15, 3), np.uint8)
             dilated_char = cv2.dilate(word_edges, kernel_char, iterations=1)
             #cv2.imshow('dilated_char', dilated_char)
             #cv2.waitKey(0)

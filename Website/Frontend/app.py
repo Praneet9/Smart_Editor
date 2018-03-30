@@ -11,6 +11,7 @@ import ast
 import string
 import re
 from Helping_Libraries import db
+import numpy as np
 from Helping_Libraries import myocr
 
 app = Flask(__name__)
