@@ -46,6 +46,12 @@ body {
     background: #fff;
 }
 
+.database-main{
+    display: grid;
+    grid-column: 2/4;
+    background: #fff;
+}
+
 /* header */
 
 .form-header {
@@ -154,6 +160,14 @@ body {
 
 .main-container {
     display: flex;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column
+}
+
+.main-container form {
+    display: flex;
     padding: 12px;
     margin: 0;
     justify-content: center;
@@ -171,7 +185,7 @@ body {
     font-size: 16px;
     color: #000;
 }
-
+/* 
 .button {
     padding: 5px 18px;
     background: #e4e4e4;
@@ -193,4 +207,5 @@ body {
     cursor: pointer;
     margin: 12px;
     outline: none;
-}
+} */
+
