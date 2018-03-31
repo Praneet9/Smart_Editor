@@ -129,7 +129,7 @@
 
         <div id="wrapper">
           <div class="image-decorator">
-            <img alt="Image principale" id="cropImage" src='../static/images/example1.jpg'/>
+            <img alt="Image principale" id="cropImage" src={{name}}/>
           </div>
           <table>
             <tr>
@@ -144,6 +144,7 @@
           <form action="/tesseract" method="POST" style="display: none">
             <input type="text" id = "imagename" name = "imagename" value={{name}}/>
             <input type="text" id = "coordinates" name = "coordinates" value=""/>
+            <input type="text" id = "pdf-name" name = "pdf-name" value={{pdf_name}}/>
             <button type="submit" id="sendtorender" name="button"></button>
           </form>
         </div>
