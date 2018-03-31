@@ -46,6 +46,12 @@ body {
     background: #fff;
 }
 
+.recognize-main {
+  display: grid;
+  grid-column: 2/4;
+  background: #fff;
+}
+
 /* header */
 
 .form-header {
@@ -167,7 +173,7 @@ body {
     margin: 0;
     justify-content: center;
     align-items: center;
-    flex-direction: row; 
+    flex-direction: row;
     font-size: 16px;
     color: #000;
 }
