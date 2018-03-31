@@ -12,7 +12,7 @@ def getConnection():
     return client
 
 def getDB(client):
-    db = client.smart_editor
+    db = client.smart_editor2
     return db
 
 def getCollection(collection_name, db):
