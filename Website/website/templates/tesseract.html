@@ -44,7 +44,7 @@
             <a href="create.html" class="sidebar-a">Create Template</a>
           </li>
           <li>
-            <a href="#" class="sidebar-a">Recognise Text</a>
+            <a href={{ url_for('filled') }} class="sidebar-a">Filled</a>
           </li>
           <li>
             <a href="database.html" class="sidebar-a">Database</a>
@@ -64,7 +64,7 @@
         {% endfor %}
         <input type="hidden" name="counter" value={{counter}} class="form-control">
           <input type="hidden" name='pdf-name' value={{pdf_name}}>
-          <button type="submit" id="sendtorender" name="button">Submit</button>
+          <button type="submit" id="sendtorender" name="button" class="btn waves-effect waves-light">Submit</button>
         </form>
       </div>
     </div>
