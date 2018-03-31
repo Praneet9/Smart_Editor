@@ -69,7 +69,7 @@
             <a href="#" class="sidebar-a">Create Template</a>
           </li>
           <li>
-            <a href={{ url_for('filled') }} class="sidebar-a">Filled</a>
+            <a href={{ url_for( 'filled') }} class="sidebar-a">Filled</a>
           </li>
           <li>
             <a href="database.html" class="sidebar-a">Database</a>
@@ -102,13 +102,13 @@
     <div class="sub-sidebar">
       <div class="form-group">
         {% for imagename in images %}
-  		<div class="col-md-2 box">
-        <label class="btn btn-primary">
-          <img src={{imagename}} alt="..." class="img-thumbnail img-check">
-        <input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
-      </label>
-    </div>
-      {% endfor %}
+        <div class="col-md-2 box">
+          <label class="btn btn-primary">
+            <img src={{imagename}} alt="..." class="img-thumbnail img-check">
+            <input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+          </label>
+        </div>
+        {% endfor %}
       </div>
     </div> -->
     <!-- Header -->
@@ -130,18 +130,23 @@
     <div class="main">
       <div id="add-new-template" class="main-container">
         <form action="/ocr" method="POST" enctype=multipart/form-data>
-          <img src="../static/images/New-document.svg" alt="Empty SVG" width="400px" height="400px">
-          <span class="file-select-text">Click on pick file, to select new filled form</span>
+          <span class="file-select-text">Click on Template to select Filled Form</span>
+          <img src="../static/images/search.svg" alt="Empty SVG" width="400px" height="400px">
 
-          <input type="file" accept="application/pdf" name="pdf" class="button" id="pdf-file" />
-<!--
-          <div class="input-field col s6">
-            <input id="first_name" type="text" name="pdf-name" class="validate" >
-            <label for="first_name">Add template name</label>
-          </div> -->
+          <!-- <input type="file" accept="application/pdf" name="pdf" class="button" id="pdf-file" /> -->
+
+          <div class="file-field input-field">
+              <div class="btn" style="background-color: #92A6A6">
+                <span>Template</span>
+                <input type="file" name="pdf">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
 
           <!-- <buton type='submit' class="button" >Submit blank template</buton> -->
-          <button class="btn waves-effect waves-light" type="submit" name="action">Submit Filled template
+          <button class="btn waves-effect waves-light" type="submit" name="action" style="margin-top:20px">Submit Filled template
             <i class="material-icons right">arrow_forward</i>
           </button>
         </form>
