@@ -183,12 +183,12 @@ body {
 
 .file-select-text {
     display: flex;
-    padding: 30px;
+    padding-bottom: 40px;
     margin: 0;
     justify-content: center;
     align-items: center;
     flex-direction: row;
-    font-size: 16px;
+    font-size: 20px;
     color: #000;
 }
 /*
@@ -213,9 +213,5 @@ body {
     cursor: pointer;
     margin: 12px;
     outline: none;
-<<<<<<< HEAD
-}
-=======
 } */
 
->>>>>>> ce872a3de4f65b30feb3a10deb445d8374ed616e
