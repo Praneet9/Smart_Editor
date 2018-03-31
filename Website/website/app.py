@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('create.html')
 
 @app.route('/file', methods=['POST'])
 def asd():
@@ -94,7 +94,7 @@ def save_labels():
         temp_dict[temp_key] = request.form.get(str(i) + 'coordinates').replace('/', '')
     db.insert_data('non_filled', temp_dict)
     cols = db.read_data('non_filled')
-    return render_template('index.html', notification = True)
+    return render_template('create.html', notification = True)
 
 @app.route('/filled')
 def filled():

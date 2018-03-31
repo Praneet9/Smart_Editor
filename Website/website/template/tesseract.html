@@ -23,11 +23,11 @@
 
   <!-- Materialize css -->
   <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+  <link rel="stylesheet" href="../static/css/materialize.min.css" type="text/css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <script src="../static/js/materialize.min.js"></script>
 
   <script src="../static/resources/jquery-1.11.3.min.js" type="text/javascript"></script>
 
@@ -64,7 +64,7 @@
         {% endfor %}
         <input type="hidden" name="counter" value={{counter}} class="form-control">
           <input type="hidden" name='pdf-name' value={{pdf_name}}>
-          <button type="submit" id="sendtorender" name="button">Submit</button>
+          <button type="submit" id="sendtorender" name="button" class="btn waves-effect waves-light">Submit</button>
         </form>
       </div>
     </div>
