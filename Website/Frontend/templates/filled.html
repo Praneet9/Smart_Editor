@@ -114,31 +114,14 @@
               <div class="row">
 		<!-- <form method="get"> -->
 		<div class="form-group">
-      <div class="row">
-        <div class="col s12 m6">
       {% for imagename in images %}
-
-
-      <div class="card">
-        <div class="card-image">
-          <img src={{imagename}}>
-          <span class="card-title">Card Title</span>
-          <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
-        </div>
-      </div>
-
-{% endfor %}
-    </div>
-  </div>
-
-
-		<!-- <div class="col-md-2 box">
+		<div class="col-md-2 box">
       <label class="btn btn-primary">
-        <img src={{imagename}} alt="..." width="" class="img-thumbnail img-check">
+        <img src={{imagename}} alt="..." class="img-thumbnail img-check">
       <input type="radio" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
     </label>
   </div>
-    {% endfor %} -->
+    {% endfor %}
     </div>
 		<div class="clearfix"></div>
 		<!-- </form> -->

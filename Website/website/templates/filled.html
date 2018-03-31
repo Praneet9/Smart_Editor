@@ -49,6 +49,25 @@
       </div>
     </div>
     <!-- SubSidebar -->
+<div class="sub-sidebar">
+    <div class="row">
+      <div class="col s12 m6">
+    {% for imagename in images %}
+
+
+    <div class="card">
+      <div class="card-image">
+        <img src={{imagename}}>
+        <span class="card-title">Card Title</span>
+        <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+      </div>
+    </div>
+
+{% endfor %}
+  </div>
+</div>
+</div>
+    <!--
     <div class="sub-sidebar">
       <div class="form-group">
         {% for imagename in images %}
@@ -60,7 +79,7 @@
     </div>
       {% endfor %}
       </div>
-    </div>
+    </div> -->
     <!-- Header -->
     <div class="header">
       <div class="form-header">
