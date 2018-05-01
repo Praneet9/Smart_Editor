@@ -12,12 +12,9 @@
   <link rel="stylesheet" href="../static/css/home.css" type="text/css">
 
   <!-- OFFLINE CSS -->
-  <link href="../static/resources/fontawesome-free-webfonts/css/fa-regular.css" media="screen" rel="stylesheet" type="text/css"
-  />
-  <link href="../static/resources/fontawesome-free-webfonts/css/fa-brands.css" media="screen" rel="stylesheet" type="text/css"
-  />
-  <link href="../static/resources/fontawesome-free-webfonts/css/fontawesome.css" media="screen" rel="stylesheet" type="text/css"
-  />
+  <link href="../static/resources/fontawesome-free-webfonts/css/fa-regular.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../static/resources/fontawesome-free-webfonts/css/fa-brands.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../static/resources/fontawesome-free-webfonts/css/fontawesome.css" media="screen" rel="stylesheet" type="text/css" />
 
   <!-- Materialize css -->
   <!-- Compiled and minified CSS -->
@@ -40,7 +37,7 @@
             <a href="#" class="sidebar-a">Create Template</a>
           </li>
           <li>
-            <a href={{ url_for('filled') }} class="sidebar-a">Filled</a>
+            <a href={{ url_for( 'filled') }} class="sidebar-a">Filled</a>
           </li>
           <li>
             <a href="database.html" class="sidebar-a">Database</a>
@@ -49,24 +46,24 @@
       </div>
     </div>
     <!-- SubSidebar -->
-<div class="sub-sidebar">
-    <div class="row">
-      <div class="col s12 m6">
-    {% for imagename in images %}
+    <div class="sub-sidebar">
+      <div class="row">
+        <div class="col s12 m6">
+          {% for imagename, pdf_name in images %}
 
+          <div class="card center">
+            <div class="card-image">
+              <img src={{imagename}}>
+              <span class="card-title">{{pdf_name}}</span>
+              <a class="btn-floating halfway-fab waves-effect waves-light red checkable"><i class="material-icons">check</i></a>
+            </div>
+          </div>
 
-    <div class="card">
-      <div class="card-image">
-        <img src={{imagename}}>
-        <span class="card-title">Card Title</span>
-        <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">add</i></a>
+          {% endfor %}
+
+        </div>
       </div>
     </div>
-
-{% endfor %}
-  </div>
-</div>
-</div>
     <!--
     <div class="sub-sidebar">
       <div class="form-group">
@@ -103,7 +100,8 @@
           <span class="file-select-text">Click on pick file, to select new filled form</span>
 
           <input type="file" accept="application/pdf" name="pdf" class="button" id="pdf-file" />
-<!--
+          <input type="text" name="non_filled" value="" id="non_filled" style="visibility: hidden" />
+          <!--
           <div class="input-field col s6">
             <input id="first_name" type="text" name="pdf-name" class="validate" >
             <label for="first_name">Add template name</label>
@@ -120,10 +118,20 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 </body>
 
-<!-- <script>
-  var input = document.querySelector('input');
-  input.style.opacity = 0;
-</script> -->
+<script>
+  $(document).ready(function(e) {
+
+    $('.checkable').click(function(e) {
+      $('.checkable').removeClass('green')
+      $('.checkable').addClass('red')
+      $(this).removeClass('red');
+      $(this).addClass('green')
+      var imagename = $(this).parent().find('img').attr('src');
+      $('#non_filled').attr('value', imagename);
+    })
+
+  });
+</script>
 
 
 </html>
