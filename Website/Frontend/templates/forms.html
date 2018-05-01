@@ -85,6 +85,9 @@
                                    <input type="text" value="{{value}}" name={{i + "values"}} maxlength="100">
                                    </div>
                                    {% endfor %}
+                                   {% for key, value in picturesdict.items() %}
+
+                                   
                                    <input type="hidden" name="counter" value={{counter}} class="form-control">
                                    <button type="submit" class="btn btn-primary">Submit</button>
                            </form>

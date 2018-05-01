@@ -48,7 +48,7 @@
       </div>
     </div>
     <!-- SubSidebar -->
-    <div class="sub-sidebar">Channels</div>
+    <!-- <div class="sub-sidebar">Channels</div> -->
     <!-- Header -->
     <div class="header">
       <div class="form-header">
@@ -65,7 +65,7 @@
       </div>
     </div>
     <!-- Main -->
-    <div class="main">
+    <div class="create-main">
       <div id="add-new-template" class="main-container">
         <form action="/pdftoimage" method="POST" enctype=multipart/form-data>
           <span class="file-select-text">Click on template, to select new blank form</span>
@@ -92,13 +92,13 @@
           <div class="col s12">
               Template Name:
               <div class="input-field inline">
-                <input id="email_inline" type="text" >
+                <input id="email_inline" name="pdf-name" type="text" >
                 <label for="email_inline">Name</label>
               </div>
             </div>
 
           <!-- <buton type='submit' class="button" >Submit blank template</buton> -->
-          <button class="btn waves-effect waves-light" type="submit" name="action" style="background-color: #92A6A6">Submit blank template
+          <button class="btn waves-effect waves-light" type="submit"  name="action" style="background-color: #92A6A6">Submit blank template
             <i class="material-icons right">arrow_forward</i>
           </button>
         </form>
@@ -108,6 +108,13 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 </body>
 
+
+<!-- <script>
+  function selectThisTemplate() {
+    let filename = document.getElementById('sendFormName').value;
+    console.log(filename)
+  }
+</script> -->
 
 
 

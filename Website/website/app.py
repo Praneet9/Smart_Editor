@@ -84,6 +84,7 @@ def getTags():
 @app.route('/confirmedLabels', methods=['POST'])
 def save_labels():
     temp_dict = {'imagename': request.form.get('imagename'), 'pdf_name': request.form.get('pdf-name')}
+    print(temp_dict)
     counter = int(request.form.get('counter'))
     for i in range(counter):
         # print(request.form.get(str(i)))
@@ -102,7 +103,7 @@ def filled():
     images = []
     print(cols)
     for c in cols:
-        images.append([c['imagename'],c['pdf_name']])
+        images.append([c['imagename'], c['pdf_name']])
     #print(images)
     return render_template('filled.html', images=images)
 

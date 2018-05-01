@@ -1,5 +1,5 @@
 .select-areas-overlay {
-	background-color: #000;
+	background-color: #eee;
 	overflow: hidden;
 	position: absolute;
 }
@@ -17,7 +17,7 @@
 }
 
 .select-areas-resize-handler {
-	background-color: #000;
+	background-color: #fff;
 	border: 1px #fff solid;
 	height: 8px;
 	width: 8px;

@@ -47,12 +47,18 @@ body {
 }
 
 .recognize-main {
-  display: grid;
-  grid-column: 2/4;
-  background: #fff;
+    display: grid;
+    grid-column: 2/4;
+    background: #fff;
 }
 
-.database-main{
+.database-main {
+    display: grid;
+    grid-column: 2/4;
+    background: #fff;
+}
+
+.create-main {
     display: grid;
     grid-column: 2/4;
     background: #fff;
@@ -191,6 +197,7 @@ body {
     font-size: 20px;
     color: #000;
 }
+
 /*
 .button {
     padding: 5px 18px;
@@ -214,7 +221,3 @@ body {
     margin: 12px;
     outline: none;
 } */
-
-.templates {
-  
-}
