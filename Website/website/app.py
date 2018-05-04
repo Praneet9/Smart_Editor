@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
-from PythonMagick import Image
-import PythonMagick
+#from PythonMagick import Image
+#import PythonMagick
+from wand.image import Image
 from pymongo import MongoClient
 from datetime import datetime
 from werkzeug.utils import secure_filename
@@ -34,20 +35,24 @@ def pdftoimage():
     pdffile = request.files['pdf']
     pdffile.save(os.path.join('./static/temporary', secure_filename(pdffile.filename)))
     pdf_name = request.form.get('pdf-name')
-    img = Image()
-    img.density('300')
-    img.read('./static/temporary/' + secure_filename(pdffile.filename))
-
-    size = "%sx%s" % (img.columns(), img.rows())
-
-    output_img = Image(size, "#ffffff")
-    output_img.type = img.type
-    output_img.composite(img, 0, 0, PythonMagick.CompositeOperator.SrcOverCompositeOp)
-    output_img.magick('JPG')
-    output_img.quality(90)
-
+    #img = Image()
     output_jpg = "./static/non_filled_images/" + "nonfilled_" + time + ".jpg"
-    output_img.write(output_jpg)
+    with Image(filename='./static/temporary/' + secure_filename(pdffile.filename), resolution=300) as img:
+        img.compression_quality = 90
+        img.save(filename=output_jpg)
+    #img.density('300')
+    #img.read('./static/temporary/' + secure_filename(pdffile.filename))
+
+    #size = "%sx%s" % (img.columns(), img.rows())
+
+    #output_img = Image(size, "#ffffff")
+    #output_img.type = img.type
+    #output_img.composite(img, 0, 0, PythonMagick.CompositeOperator.SrcOverCompositeOp)
+    #output_img.magick('JPG')
+    #output_img.quality(90)
+
+    #output_jpg = "./static/non_filled_images/" + "nonfilled_" + time + ".jpg"
+    #output_img.write(output_jpg)
     return render_template('recognize.html', name = output_jpg, pdf_name = pdf_name)
 
 @app.route('/tesseract', methods=['POST'])
@@ -135,20 +140,27 @@ def ocr():
     pdffile = request.files['pdf']
     pdffile.save(os.path.join('./static/temporary', secure_filename(pdffile.filename)))
     i = 0
-    img = Image()
-    img.density('300')
-    img.read('./static/temporary/' + secure_filename(pdffile.filename))
+    # img = Image()
+    # img.density('300')
+    # img.read('./static/temporary/' + secure_filename(pdffile.filename))
+    #
+    # size = "%sx%s" % (img.columns(), img.rows())
+    #
+    # output_img = Image(size, "#ffffff")
+    # output_img.type = img.type
+    # output_img.composite(img, 0, 0, PythonMagick.CompositeOperator.SrcOverCompositeOp)
+    # output_img.magick('JPG')
+    # output_img.quality(90)
+    # os.mkdir('./static/filled_images/' + time)
+    # filledimage = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
+    # output_img.write(filledimage)
 
-    size = "%sx%s" % (img.columns(), img.rows())
-
-    output_img = Image(size, "#ffffff")
-    output_img.type = img.type
-    output_img.composite(img, 0, 0, PythonMagick.CompositeOperator.SrcOverCompositeOp)
-    output_img.magick('JPG')
-    output_img.quality(90)
-    os.mkdir('./static/filled_images/' + time)
     filledimage = "./static/filled_images/" + time + "/" + "filled_" + str(i) + ".jpg"
-    output_img.write(filledimage)
+    os.mkdir('./static/filled_images/' + time)
+    with Image(filename='./static/temporary/' + secure_filename(pdffile.filename), resolution=300) as img:
+        img.compression_quality = 90
+        img.save(filename=filledimage)
+
     cols = db.read_data('non_filled')
     for c in cols:
         if c['imagename'] == nonfilledimagename:
@@ -167,7 +179,7 @@ def ocr():
     #print(formvalues)
     ## inserting into database
     #insert_data('filled', args_dict=formvalues)
-    return render_template('forms.html', formvalues=formvalues)
+    return render_template('form.html', formvalues=formvalues)
 
 @app.route('/saveformvalues', methods=['POST'])
 def saveformvalues():

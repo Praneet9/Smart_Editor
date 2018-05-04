@@ -60,15 +60,29 @@
     </div>
     <!-- Main -->
     <div class="database-main">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col s12">
           This is an inline input field:
           <div class="input-field inline">
-            <label for="text_inline">Lable</label>
-            <input id="text_inline" type="text" >
+            <input type="text" >
+          </div>
+        </div>
+      </div> -->
+
+      {% for i, label, value in formvalues %}
+
+      <div class="row">
+        <div class="col s12">
+          {{label}}
+          <div class="input-field inline">
+            <input type="text" value={{value}} >
           </div>
         </div>
       </div>
+
+      {% endfor %}
+
+
     </div>
   </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>

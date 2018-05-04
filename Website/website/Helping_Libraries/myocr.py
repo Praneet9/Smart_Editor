@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import tensorflow as tf
-tf.reset_default_graph()
+#tf.reset_default_graph()
 from keras.models import load_model
 from keras.preprocessing import image as im
 from keras import backend as k
@@ -216,6 +216,7 @@ def ocrit(image, model):
             word_list.append("".join(character_list))
     recognized_text = " ".join(word_list)
     #print(recognized_text)
+    #tf.reset_default_graph()
     return recognized_text
 
 # cropping and setdifferencing function
@@ -225,6 +226,9 @@ def getNonfilledCroppedSections(nonfilledimage, filledimage, nonfilledimagedilat
     tf.reset_default_graph()
     model = load_model('finalbestmodel.hdf5')
     for key, value in coordinates.items():
+        if key == "pdf_name":
+            continue
+        print(key, value)
         label = key
         value = ast.literal_eval(value)
         x, y, w, h = value
