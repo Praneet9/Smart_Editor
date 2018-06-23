@@ -88,7 +88,7 @@ def getTags():
 
 @app.route('/confirmedLabels', methods=['POST'])
 def save_labels():
-    temp_dict = {'imagename': request.form.get('imagename'), 'pdf_name': request.form.get('pdf-name')}
+    temp_dict = {'imagename': request.form.get('imagename'), 'pdf_name': request.form.get('pdf-name').replace('\\','')}
     print(temp_dict)
     counter = int(request.form.get('counter'))
     for i in range(counter):
@@ -118,6 +118,15 @@ def database():
     images = []
     for c in cols:
         images.append(c['imagename'])
+
+
+    cols = db.read_data('non_filled')
+    for c in cols:
+        if c['imagename'] == nonfilledimagename:
+            del c['_id']
+            del c['imagename']
+            for key, values in c.items():
+                labelncoor[key] = values
     #print(images)
     return render_template('database.html', imagepath=images)
 
@@ -191,7 +200,7 @@ def saveformvalues():
         formvalues[key] = value
     print(formvalues)
     db.insert_data('filled', args_dict=formvalues)
-    return render_template('success.html')
+    return "Successful"
 
 if __name__ == '__main__':
     app.run(debug=True)

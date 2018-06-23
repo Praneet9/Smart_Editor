@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 import tensorflow as tf
-#tf.reset_default_graph()
+tf.reset_default_graph()
 from keras.models import load_model
 from keras.preprocessing import image as im
 from keras import backend as k
