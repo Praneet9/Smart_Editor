@@ -1,3 +1,0 @@
-externals: {
-  jquery: "jQuery";
-}
