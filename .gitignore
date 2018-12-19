@@ -741,3 +741,7 @@ paket-files/
 
 
 # End of https://www.gitignore.io/api/osx,node,xcode,linux,adobe,pydev,django,android,intellij,sublimetext,intellij+all,visualstudio,androidstudio,jupyternotebook,visualstudiocode
+
+**/filled_images
+**/non_filled_images
+**/temporary
