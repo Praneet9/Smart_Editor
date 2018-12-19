@@ -62,15 +62,15 @@
       <button class="sidebar-button">Upload Template</button>
       <div class="sidebar-div">
         <ul>
-          <li>
-            <a href="#" class="sidebar-a">Create Template</a>
-          </li>
-          <li>
-            <a href={{ url_for( 'filled') }} class="sidebar-a">Filled</a>
-          </li>
-          <li>
-            <a href="database.html" class="sidebar-a">Database</a>
-          </li>
+            <li>
+                <a href="/" class="sidebar-a">Create Template</a>
+              </li>
+              <li>
+                <a href={{ url_for('filled') }} class="sidebar-a">Filled</a>
+              </li>
+              <li>
+                <a href="#" class="sidebar-a">Database</a>
+              </li>
         </ul>
       </div>
     </div>
@@ -124,7 +124,7 @@
       </div>
     </div>
     <!-- Main -->
-    <div class="main">
+    <div class="main" style="position: sticky">
       <div id="add-new-template" class="main-container">
         <form action="/ocr" method="POST" enctype=multipart/form-data>
           <span class="file-select-text">Click on Template to select Filled Form</span>
@@ -144,7 +144,7 @@
 
           <!-- <buton type='submit' class="button" >Submit blank template</buton> -->
           <button class="btn waves-effect waves-light" type="submit" name="action" style="margin-top:20px">Submit Filled template
-            <i class="material-icons right">arrow_forward</i>
+            <!-- <i class="material-icons right">arrow_forward</i> -->
           </button>
         </form>
       </div>

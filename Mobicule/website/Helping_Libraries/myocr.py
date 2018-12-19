@@ -9,11 +9,6 @@ from keras import backend as k
 import re
 import ast
 
-print("In my ocr")
-
-def testing():
-    print('Hello My OCR')
-
 def get_model():
     global model, graph, label_dictionary
 

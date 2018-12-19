@@ -17,7 +17,7 @@ import numpy as np
 app = Flask(__name__)
 
 myocr.get_model()
-print("In app.py")
+
 @app.route('/')
 def index():
     return render_template('create.html')
@@ -63,7 +63,7 @@ def getTags():
     initialcoordinates = request.form.get('coordinates')
     coordinates = initialcoordinates[:-1]
     pdf_name = request.form.get('pdf-name')
-    print(coordinates)
+    # print(coordinates)
     labeldict = {}
     index = 0
     #print(imagename)
@@ -90,7 +90,7 @@ def getTags():
 @app.route('/confirmedLabels', methods=['POST'])
 def save_labels():
     temp_dict = {'imagename': request.form.get('imagename'), 'pdf_name': request.form.get('pdf-name').replace('\\','')}
-    print(temp_dict)
+    # print(temp_dict)
     counter = int(request.form.get('counter'))
     for i in range(counter):
         # print(request.form.get(str(i)))
@@ -134,9 +134,9 @@ def database():
 @app.route('/script')
 def script():
     filled = request.form.get("file")
-    print(filled)
+    # print(filled)
     selected = request.form.get("imgname")
-    print(selected)
+    # print(selected)
     return render_template('database.html')
 
 @app.route('/ocr', methods = ['POST'])

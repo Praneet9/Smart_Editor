@@ -29,15 +29,15 @@
       <button class="sidebar-button">Upload Template</button>
       <div class="sidebar-div">
         <ul>
-          <li>
-            <a href="create.html" class="sidebar-a">Create Template</a>
-          </li>
-          <li>
-            <a href={{ url_for( 'filled') }} class="sidebar-a">Filled</a>
-          </li>
-          <li>
-            <a href="#" class="sidebar-a">Database</a>
-          </li>
+            <li>
+                <a href="/" class="sidebar-a">Create Template</a>
+              </li>
+              <li>
+                <a href={{ url_for('filled') }} class="sidebar-a">Filled</a>
+              </li>
+              <li>
+                <a href="#" class="sidebar-a">Database</a>
+              </li>
         </ul>
       </div>
     </div>
@@ -70,7 +70,7 @@
       </div> -->
       <form action="/saveformvalues" method="POST">
         {% set counter = formvalues|length %}
-        <input name=counter type="text" value={{counter}} >
+        <input name=counter type="hidden" value={{counter}} >
         {% for i, label, value in formvalues %}
 
         <div class="row">
@@ -84,8 +84,8 @@
         </div>
 
         {% endfor %}
-        <button class="btn waves-effect waves-light" type="submit" name="action" style="margin-top:20px">Submit
-          <i class="material-icons center">arrow_forward</i>
+        <button class="btn waves-effect waves-light" type="submit" name="action" style="margin: 10px;">Submit
+          <!-- <i class="material-icons center">arrow_forward</i> -->
         </button>
       </form>
 
