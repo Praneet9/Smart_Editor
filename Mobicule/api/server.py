@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
 import os
 from processing import pre_process, get_text
-
+import datetime
+# from ctpn.demo_pb import draw_border
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER']='./UPLOAD_FOLDER/'
 
@@ -34,7 +35,7 @@ def get_text_prediction():
     json = request.get_json()
     print(json)
     if len(json['nameValuePairs']) == 0:
-        return jsonify({'error': 'invalid input'})
+        return jsonify({'error': 'invalid qinput'})
 
     return jsonify({'you sent this': 'ok'})
 
@@ -42,14 +43,17 @@ def get_text_prediction():
 def GetNoteText():
     if request.method == 'POST':
         file = request.files['image']
-        filename = file.filename
+        filename = file.filename[:-4] + str(datetime.datetime.now()) + '.png'
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         template_type = 'license_template.jpg'
-
         pre_processed = pre_process(template_type, os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        data = get_text(pre_processed)
 
-        return jsonify({'status':True,'fields':{'name':'Vpul','PAN':'CSUPR6644H','DOB':'25/44/78'}})
+        '''Insert draw_border function with input image'''
+
+        data = get_text(pre_processed)
+        print(data)
+        dictOfWords = { i : i for i in data }
+        return jsonify({'status':True,'fields': dictOfWords})
     else:
         return "Y U NO USE POST?"
 
