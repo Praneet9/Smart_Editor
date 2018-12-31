@@ -7,6 +7,33 @@ def testing(one, two):
 	print(two)
 	return "Thanks"
 
+def recognise_text(image_path, template_type):
+    image = cv2.imread(image_path)
+    cv2.imwrite('im.jpg', image)
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+
+    luminance, a, b = cv2.split(lab)
+
+    hist,bins = np.histogram(luminance,256,[0,256])
+
+    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
+
+    luminance[luminance > mean] = 255
+    luminance[luminance <= mean] = 0
+    cv2.imwrite('im.jpg', luminance)
+    template = cv2.imread(template_type, 0)
+    cv2.imwrite('temp.jpg', template)
+    
+    ret3, template = cv2.threshold(template, 220, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+
+    luminance = np.subtract(template, luminance)
+    luminance = np.invert(luminance)
+
+    text = pyt.image_to_string(luminance)
+    data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
+    
+    return list(data)
+
 def pre_process(template, image):
     template = cv2.imread(template, 0)
     image = cv2.imread(image, 0)
