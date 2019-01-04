@@ -2,14 +2,10 @@ import numpy as np
 import cv2
 import pytesseract as pyt
 
-def testing(one, two):
-	print(one)
-	print(two)
-	return "Thanks"
 
 def recognise_text(image_path, template_type):
     image = cv2.imread(image_path)
-    cv2.imwrite('im.jpg', image)
+
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 
     luminance, a, b = cv2.split(lab)
@@ -20,9 +16,8 @@ def recognise_text(image_path, template_type):
 
     luminance[luminance > mean] = 255
     luminance[luminance <= mean] = 0
-    cv2.imwrite('im.jpg', luminance)
+
     template = cv2.imread(template_type, 0)
-    cv2.imwrite('temp.jpg', template)
     
     ret3, template = cv2.threshold(template, 220, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
@@ -58,7 +53,7 @@ def pre_process(template, image):
     
     # Subtracting from template
     subtract = np.subtract(OBinary, template)
-    cv2.imwrite('sub.jpg', subtract)
+
     return subtract
 
 def get_text(image):
@@ -69,7 +64,7 @@ def get_text(image):
     # dilating image to detect individual lines
     kernel_line = np.ones((2, 100), np.uint8)
     dilated_line = cv2.dilate(image_edges, kernel_line, iterations=1)
-    cv2.imwrite('dilate.jpg', dilated_line)
+
     # finding contours of the line
     im2, ctrs_line, hier = cv2.findContours(dilated_line.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     sorted_ctrs_line = sorted(ctrs_line, key=lambda ctr: cv2.boundingRect(ctr)[1])
@@ -84,7 +79,7 @@ def get_text(image):
             
         cropped_line = image[y_line:y_line + h_line, x_line:x_line + w_line]
         # cropped_line = np.invert(cropped_line)
-        cv2.imwrite('cropped' + str(i) + '.jpg', cropped_line)
+
         line_text = pyt.image_to_string(cropped_line)
         line_text = line_text.replace('/', 'i').replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper()
         if line_text != '':
