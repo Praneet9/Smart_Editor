@@ -6,7 +6,7 @@ import base64
 import db
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER']='./UPLOAD_FOLDER/'
+UPLOAD_FOLDER = './UPLOAD_FOLDER/'
 
 # GET
 @app.route('/test')
@@ -45,6 +45,10 @@ def findText():
         image_file = request_data.get('image')
         image_type = request_data.get('type')
 
+        if not os.path.exists(UPLOAD_FOLDER + image_type):
+            os.mkdir(UPLOAD_FOLDER + image_type)
+            os.mkdir(UPLOAD_FOLDER + image_type + '/' + 'faces')
+
         if image_type == 'Driving Licence':
             template_type = 'templates/license_template.jpg'
         elif image_type == 'PAN Card':
@@ -54,18 +58,19 @@ def findText():
 
         current_time = str(datetime.datetime.now())
 
-        filename = current_time + '.png'
-        with open('./UPLOAD_FOLDER/' + filename, 'wb') as f:
+        filename = UPLOAD_FOLDER + image_type + '/' + current_time + '.png'
+        photo_path = UPLOAD_FOLDER + image_type + '/' + 'faces' + '/' + current_time + '.png'
+        with open(filename, 'wb') as f:
             f.write(base64.b64decode(image_file))
 
-        data = recognise_text(os.path.join(app.config['UPLOAD_FOLDER'], filename), template_type)
+        data = recognise_text(filename, template_type, photo_path)
 
         while '' in data:
             data.remove('')
 
         dictOfWords = { i : i for i in data }
         
-        return jsonify({'status':True, 'fields': dictOfWords, 'name': filename })
+        return jsonify({'status':True, 'fields': dictOfWords, 'name': current_time + '.png' })
     else:
         return jsonify({'status':False})
 
