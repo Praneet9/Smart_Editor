@@ -6,9 +6,12 @@ import pytesseract as pyt
 def recognise_text(image_path, template_type, photo_path):
     image = cv2.imread(image_path)
 
-    face = get_photo(image)
+    face, found = get_photo(image)
 
-    cv2.imwrite(photo_path, face)
+    if found:
+        cv2.imwrite(photo_path, face)
+    else:
+        photo_path = face
 
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
 
@@ -21,6 +24,8 @@ def recognise_text(image_path, template_type, photo_path):
     luminance[luminance > mean] = 255
     luminance[luminance <= mean] = 0
 
+    cv2.imwrite('luminance.jpg', luminance)
+
     template = cv2.imread(template_type, 0)
     
     ret3, template = cv2.threshold(template, 220, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
@@ -31,7 +36,7 @@ def recognise_text(image_path, template_type, photo_path):
     text = pyt.image_to_string(luminance)
     data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
     
-    return list(data)
+    return list(data), photo_path
 
 
 def get_photo(image):
@@ -40,14 +45,17 @@ def get_photo(image):
     '''
     scale_factor = 1.1
     min_neighbors = 3
-    min_size = (250, 250)
+    min_size = (150, 150)
     flags = cv2.CASCADE_SCALE_IMAGE
 
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
     faces = face_cascade.detectMultiScale(image, scaleFactor = scale_factor, minNeighbors = min_neighbors,
                                           minSize = min_size, flags = flags)
-    x, y, w, h = faces[0]
-    face = image[y-50:y+h+40, x-10:x+w+10]
-	
-    return face
+    
+    try:
+        x, y, w, h = faces[0]
+        face = image[y-50:y+h+40, x-10:x+w+10]
+        return face, True
+    except Exception as e:
+        return "Photo not found!", False
