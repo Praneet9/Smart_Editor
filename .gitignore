@@ -745,3 +745,5 @@ paket-files/
 **/filled_images
 **/non_filled_images
 **/temporary
+
+**ignore/
