@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import pytesseract as pyt
+import re
 
 
 kernel_sharpening = np.array([[-1,-1,-1], 
@@ -74,9 +75,27 @@ def recognise_text_wo_template(image_path, photo_path):
     cv2.imwrite('luminance.jpg', luminance)
 
     text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
-    data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
+    data = list(text.split('\n'))
+
+    detected_text = clean_text(data)
     
-    return list(data), photo_path
+    return detected_text, photo_path
+
+
+def clean_text(text_list):
+    my_list = []
+    for i in text_list:
+        if i != ' ' or i != '  ' or i != '':
+            i = re.sub('[^A-Za-z0-9-/ ]+', '', i)
+            shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
+            i = shortword.sub('', i)
+            i = i.lstrip()
+            i = i.rstrip()
+            i = re.sub('\s{2,}', '', i) 
+            if i == '':
+                continue
+            my_list.append(i)
+    return my_list
 
 
 def get_photo(image):
