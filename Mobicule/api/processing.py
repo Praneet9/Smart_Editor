@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import pytesseract as pyt
 import re
+from ctpn.demo_pb import get_coords
 
 
 kernel_sharpening = np.array([[-1,-1,-1], 
@@ -48,7 +49,22 @@ def recognise_text(image_path, template_type, photo_path):
 
 
 def recognise_text_wo_template(image_path, photo_path):
-    image = cv2.imread(image_path)
+    
+    image = cv2.imread(image_path, 0)
+
+    coordinates = get_coords(image_path)
+
+    detected_text = []
+
+    for coords in coordinates:
+        x, y, w, h = coords
+        temp = image[y:h, x:w]
+
+        ret3, luminance = cv2.threshold(temp, 100, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+        luminance = cv2.copyMakeBorder(luminance,10,10,10,10,cv2.BORDER_CONSTANT,value=[255, 255, 255])
+        text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+        detected_text.append(text)
 
     face, found = get_photo(image)
 
@@ -56,30 +72,6 @@ def recognise_text_wo_template(image_path, photo_path):
         cv2.imwrite(photo_path, face)
     else:
         photo_path = face
-
-    image = cv2.GaussianBlur(image, (5, 5), 0)
-    image = cv2.filter2D(image, -1, kernel_sharpening)
-    image = cv2.GaussianBlur(image, (3, 3), 0)
-    image = cv2.filter2D(image, -1, kernel_sharpening)
-    image = cv2.GaussianBlur(image, (3, 3), 0)
-
-    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
-
-    luminance, a, b = cv2.split(lab)
-
-    hist,bins = np.histogram(luminance,256,[0,256])
-
-    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
-
-    luminance[luminance > mean] = 255
-    luminance[luminance <= mean] = 0
-
-    cv2.imwrite('luminance.jpg', luminance)
-
-    text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
-    data = list(text.split('\n'))
-
-    detected_text = clean_text(data)
     
     return detected_text, photo_path
 
@@ -89,8 +81,8 @@ def clean_text(text_list):
     for i in text_list:
         if i != ' ' or i != '  ' or i != '':
             i = re.sub('[^A-Za-z0-9-/ ]+', '', i)
-            shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
-            i = shortword.sub('', i)
+            #shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
+            #i = shortword.sub('', i)
             i = i.lstrip()
             i = i.rstrip()
             i = re.sub('\s{2,}', '', i) 
