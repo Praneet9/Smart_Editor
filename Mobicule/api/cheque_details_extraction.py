@@ -1,3 +1,4 @@
+## All neccessary imports ##
 import cv2
 import re
 import imutils
@@ -6,7 +7,7 @@ import pytesseract as pyt
 from imutils import contours
 from skimage.segmentation import clear_border
 
-
+#### MICR Code ####
 def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
     # grab the internal Python iterator for the list of character
     # contours, then  initialize the character ROI and location
@@ -63,7 +64,6 @@ def extract_digits_and_symbols(image, charCnts, minW=5, minH=15):
             break
     # return a tuple of the ROIs and locations
     return (rois, locs)
-
 def detect_micr(cheque_image):
     reference_image = 'ref.png'
 
@@ -232,79 +232,205 @@ def detect_micr(cheque_image):
     return ' '.join(output)
 
 def get_micrcode(image_name):
-    print(image_name)
     micr_code = detect_micr(image_name)
-    
     a, b, c, d = micr_code.split()
     new_micr = 'U' + re.findall(r'[0-9]{6}', a)[0] + 'U' + ' ' + re.findall(r'[0-9]{9}', b)[0] + 'T' + ' ' + re.findall(r'[0-9]{6}', c)[0] + 'U' + ' ' + re.findall(r'[0-9]{2}', d)[0]
     return new_micr
-    
-def get_acc(image_path):
-    # Read image
-    image = cv2.imread(image_path)
-    image = cv2.resize(image, (960,540))
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    img_thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-    
-    # Read template
-    template = cv2.imread('template_acc.jpg', 0)
-    template = cv2.resize(template, (960,540))
-    thresh = cv2.threshold(template, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-    
-    # Set difference
-    diff = cv2.subtract(gray, template)
-    tdiff = cv2.subtract(img_thresh, thresh)
-    
-    bit = cv2.bitwise_and(diff, tdiff)
-    
-    #cv2.imwrite('bit.png', bit)
-    text = pyt.image_to_string(diff, config=('--oem 1 --psm 3'))
-    # print(text)
-    if '-' in list(text):
-        # print('Inside Loop', text)
-        text = text.replace('-', '')
-        # print(text)
-    try:
-        acc_no = re.findall(r'[0-9]{9,18}',text)[0]
-    except:
-        text = pyt.image_to_string(img_thresh, config=('--oem 1 --psm 3'))
-        if '-' in list(text):
-            # print('Inside Loop Except', text)
-            text = text.replace('-', '')
-        acc_no = re.findall(r'[0-9]{9,18}',text)[0]
-    return acc_no
+#### MICR Code END ####
 
+#### IFSC #####
 def get_ifsc(image_path):
     
     def replace(text):
         # Remove some noise present in the text
-        chars = "`*_{}[]()>#+-.!$:;"
+        chars = "`*_{}[]()>#+-.!$:;?"
         for c in chars:
             text = text.replace(c, '')
         return text
     
     # Read image
     image = cv2.imread(image_path)
+    image = cv2.resize(image, (1920,1080))
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    luminance, a, b = cv2.split(lab)
+    
+    hist,bins = np.histogram(luminance,256,[0,256])
+
+    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
+
+    luminance[luminance > mean] = 255
+    luminance[luminance <= mean] = 0
+    
     # image = cv2.resize(image, (960,540))
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    img_thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+#     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#     img_thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
     
     # Forward it to ocr to get all the text present in image
-    text = pyt.image_to_string(img_thresh, config=('--oem 1 --psm 3'))
+    text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+#     print('Inside Ifsc\n', text)
     # Find IFSC in text and find the IFSC Code using regex
     ifsc = text.find('IFSC')
     # Select the range where the real IFSC Code will be present
     text = text[ifsc: ifsc + 30]
-    # print(text)
+#     print(text)
     text = replace(text)
     try:
         text = re.findall(r'[A-Z0-9]{11}', text)[0]
     except:
-        return 'IFSC Not Found'
+        return 0
     return text
 
-# image = 'test.jpg'
-# print('Image Name', image)
-# print('Detect MICR:-', get_micrcode(image))
-# print('Detect ACC.No.:-', get_acc(image))
-# print('Detect IFSC:-', get_ifsc(image))
+def get_ifsc2(image_path):
+    
+    def replace(text):
+        # Remove some noise present in the text
+        chars = "`*_{}[]()>#+-.!$:;?"
+        for c in chars:
+            text = text.replace(c, '')
+        return text
+    
+    # Read image
+    image = cv2.imread(image_path)
+    image = cv2.resize(image, (1920,1080))
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    luminance, a, b = cv2.split(lab)
+    
+    hist,bins = np.histogram(luminance,256,[0,256])
+
+    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
+
+    luminance[luminance > mean] = 255
+    luminance[luminance <= mean] = 0
+    
+    # Read template
+    template = cv2.imread('templates/template_ifsc.png')
+    template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+    template_thresh = cv2.threshold(template_gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    
+    diff = cv2.subtract(luminance, template_thresh)
+    diff = cv2.bitwise_and(diff, gray_image)
+    # Forward it to ocr to get all the text present in image
+    text = pyt.image_to_string(diff, config=('--oem 1 --psm 3'))
+#     print('Inside Ifsc\n', text)
+    # Find IFSC in text and find the IFSC Code using regex
+#     ifsc = text.find('IFSC')
+    # Select the range where the real IFSC Code will be present
+#     text = text[ifsc: ifsc + 50]
+#     print(text)
+    text = replace(text)
+    try:
+        text = re.findall(r'[A-Z0-9]{11}', text)[0]
+    except:
+        return 0
+    return text
+
+def get_ifsc3(image):
+    
+    def replace(text):
+        return text.replace('?', '7')
+    
+    img = cv2.imread(image)
+    text = pyt.image_to_string(img, config=('--oem 1 --psm 3'))
+#     print(text)
+    ifsc = text.find('IFSC')
+    new_text = text[ifsc : ifsc + 30]
+    new_text = replace(new_text)
+#     print(new_text)
+    try:
+        code = re.findall(r'[A-Z0-9]{11}', new_text)[0]
+    except:
+        return 0
+    return code
+
+def ensemble_ifsc_output(cheque_img):
+    ifsc1 = get_ifsc(cheque_img)
+    ifsc2 = get_ifsc2(cheque_img)
+    ifsc3 = get_ifsc3(cheque_img)
+    ifsc = [ifsc1, ifsc2, ifsc3]
+#     print(ifsc)
+    if ifsc1 == 0 and ifsc2 == 0 and ifsc3 == 0:
+        return 'IFSC Not Found'
+    else:
+        for code in ifsc:
+            if code != 0:
+                return code
+        return 'IFSC Not Found'
+    
+#### IFSC END #####
+
+
+#### Account No ####
+def get_acc(image_path):
+    # Read image
+    image = cv2.imread(image_path)
+    image = cv2.resize(image, (1920,1080))
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+    luminance, a, b = cv2.split(lab)
+    
+    hist,bins = np.histogram(luminance,256,[0,256])
+
+    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
+
+    luminance[luminance > mean] = 255
+    luminance[luminance <= mean] = 0
+    
+    # Read template
+    template = cv2.imread('templates/template_acc.jpg', 0)
+#     template = cv2.resize(template, (960,540))
+    thresh = cv2.threshold(template, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    
+    # Set difference
+    diff = cv2.subtract(luminance, template)
+#     tdiff = cv2.subtract(img_thresh, thresh)
+    
+#     bit = cv2.bitwise_and(diff, tdiff)
+    
+    #cv2.imwrite('bit.png', bit)
+    text = pyt.image_to_string(diff, config=('--oem 1 --psm 3'))
+#     print(text)
+    if '-' in list(text):
+        # print('Inside Loop', text)
+        text = text.replace('-', '')
+#         print(text)
+    try:
+        acc_no = re.findall(r'[0-9]{9,18}',text)[0]
+    except:
+        text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+        if '-' in list(text):
+            # print('Inside Loop Except', text)
+            text = text.replace('-', '')
+        try:
+            acc_no = re.findall(r'[0-9]{9,18}',text)[0]
+        except:
+            return 0
+    return acc_no
+    
+def get_acc2(cheque_img):
+    img = cv2.imread(cheque_img)
+    
+    text = pyt.image_to_string(img, config=('--oem 1 --psm 3'))
+    # print(text)
+    if '-' in list(text):
+        text = text.replace('-', '')
+    try:
+        text = re.findall(r'[0-9]{9,18}', text)[0]
+    except:
+        return 0
+    return text
+
+
+def ensemble_acc_output(cheque_img):
+    acc1 = get_acc(cheque_img)
+    acc2 = get_acc2(cheque_img)
+    acc = [acc1, acc2]
+    #print(acc)
+    
+    if acc1 == 0 and acc2 == 0:
+        return 'Account Number Not Found'
+    else:
+        for no in acc:
+            if no != 0:
+                return no
+        return 'Account Number Not Found'
+#### Account No END ####

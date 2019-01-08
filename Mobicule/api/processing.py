@@ -40,9 +40,11 @@ def recognise_text(image_path, template_type, photo_path):
     luminance = np.invert(luminance)
 
     text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
-    data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
-    
-    return list(data), photo_path
+    data = list(text.split('\n'))
+
+    detected_text = clean_text(data)
+
+    return detected_text, photo_path
 
 
 def recognise_text_wo_template(image_path, photo_path):
