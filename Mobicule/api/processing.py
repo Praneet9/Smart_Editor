@@ -3,6 +3,11 @@ import cv2
 import pytesseract as pyt
 
 
+kernel_sharpening = np.array([[-1,-1,-1], 
+                                [-1, 9,-1],
+                                [-1,-1,-1]])
+
+
 def recognise_text(image_path, template_type, photo_path):
     image = cv2.imread(image_path)
 
@@ -32,6 +37,41 @@ def recognise_text(image_path, template_type, photo_path):
 
     luminance = np.subtract(template, luminance)
     luminance = np.invert(luminance)
+
+    text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+    data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
+    
+    return list(data), photo_path
+
+
+def recognise_text_wo_template(image_path, photo_path):
+    image = cv2.imread(image_path)
+
+    face, found = get_photo(image)
+
+    if found:
+        cv2.imwrite(photo_path, face)
+    else:
+        photo_path = face
+
+    image = cv2.GaussianBlur(image, (5, 5), 0)
+    image = cv2.filter2D(image, -1, kernel_sharpening)
+    image = cv2.GaussianBlur(image, (3, 3), 0)
+    image = cv2.filter2D(image, -1, kernel_sharpening)
+    image = cv2.GaussianBlur(image, (3, 3), 0)
+
+    lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
+
+    luminance, a, b = cv2.split(lab)
+
+    hist,bins = np.histogram(luminance,256,[0,256])
+
+    mean = int((np.argmax(hist) + np.argmin(hist)) / 2)
+
+    luminance[luminance > mean] = 255
+    luminance[luminance <= mean] = 0
+
+    cv2.imwrite('luminance.jpg', luminance)
 
     text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
     data = text.replace("#", "4").replace("'", "").replace('"', '').replace('!', 'I').replace(']', 'I').upper().split('\n')
