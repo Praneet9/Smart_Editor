@@ -56,6 +56,8 @@ def recognise_text_wo_template(image_path, photo_path):
 
     detected_text = []
 
+    coordinates = sorted(coordinates, key = lambda coords: coords[1])
+
     for coords in coordinates:
         x, y, w, h = coords
         temp = image[y:h, x:w]
