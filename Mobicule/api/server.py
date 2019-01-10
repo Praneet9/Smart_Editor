@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import os
+# from werkzeug.utils import secure_filename
 from processing import recognise_text, recognise_text_wo_template
 from cheque_details_extraction import get_micrcode, ensemble_acc_output, ensemble_ifsc_output
 import datetime
@@ -8,6 +9,53 @@ import db
 
 app = Flask(__name__)
 UPLOAD_FOLDER = './UPLOAD_FOLDER/'
+
+@app.route('/image/upload_multipart', methods=['POST'])
+def ganesh():
+    # photo = request.files['photo']
+    # photo.save('ganesh.jpg')
+
+    if request.method == 'POST':
+        
+        # request_data = request.get_json()
+
+        # image_file = request_data.get('image')
+        # image_type = request_data.get('type')
+        image_type = "PAN Card"
+        if not os.path.exists(UPLOAD_FOLDER + image_type):
+            os.mkdir(UPLOAD_FOLDER + image_type)
+            os.mkdir(UPLOAD_FOLDER + image_type + '/' + 'faces')
+
+        current_time = str(datetime.datetime.now())
+
+        filename = UPLOAD_FOLDER + image_type + '/' + current_time + '.png'
+
+        if image_type == 'Bank Cheque':
+            print(filename)
+            # with open(filename, 'wb') as f:
+            #     f.write(base64.b64decode(image_file))
+            dictOfWords = {}
+            dictOfWords['MICR'] = get_micrcode(filename)
+            print(dictOfWords['MICR'])
+            dictOfWords['ACC.No'] = ensemble_acc_output(filename)
+            dictOfWords['IFSC'] = ensemble_ifsc_output(filename)
+            print(dictOfWords.values())
+            return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': 'none' })
+        else:
+            photo_path = UPLOAD_FOLDER + image_type + '/' + 'faces' + '/' + current_time + '.png'
+            
+            photo = request.files['photo']
+            photo.save(filename)
+
+            data, photo_path = recognise_text_wo_template(filename, photo_path)
+
+            dictOfWords = { idx : text for idx, text in enumerate(data) }
+            print(dictOfWords)
+            return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': photo_path })
+    else:
+        return jsonify({'status':False})
+
+    return "Thankyou"
 
 # GET
 @app.route('/test')
@@ -82,7 +130,7 @@ def findText():
             while '' in data:
                 data.remove('')
 
-            dictOfWords = { i : i for i in data }
+            dictOfWords = { idx : text for idx, text in enumerate(data) }
             print(dictOfWords)
             return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': photo_path })
     else:

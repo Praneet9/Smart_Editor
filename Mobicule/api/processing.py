@@ -40,7 +40,7 @@ def recognise_text(image_path, template_type, photo_path):
     luminance = np.subtract(template, luminance)
     luminance = np.invert(luminance)
 
-    text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+    text = pyt.image_to_string(luminance, lang="eng+hin", config=('--oem 1 --psm 3'))
     data = list(text.split('\n'))
 
     detected_text = clean_text(data)
@@ -65,8 +65,12 @@ def recognise_text_wo_template(image_path, photo_path):
         ret3, luminance = cv2.threshold(temp, 100, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         luminance = cv2.copyMakeBorder(luminance,10,10,10,10,cv2.BORDER_CONSTANT,value=[255, 255, 255])
-        text = pyt.image_to_string(luminance, config=('--oem 1 --psm 3'))
+        text = pyt.image_to_string(luminance, lang="eng+hin", config=('--oem 1 --psm 3'))
+        text = clean_text(text)
+        if text == '':
+            continue
         detected_text.append(text)
+        print(text)
 
     face, found = get_photo(image)
 
@@ -78,20 +82,32 @@ def recognise_text_wo_template(image_path, photo_path):
     return detected_text, photo_path
 
 
-def clean_text(text_list):
-    my_list = []
-    for i in text_list:
-        if i != ' ' or i != '  ' or i != '':
-            i = re.sub('[^A-Za-z0-9-/ ]+', '', i)
-            #shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
-            #i = shortword.sub('', i)
-            i = i.lstrip()
-            i = i.rstrip()
-            i = re.sub('\s{2,}', '', i) 
-            if i == '':
-                continue
-            my_list.append(i)
-    return my_list
+def clean_text(text):
+    if text != ' ' or text != '  ' or text != '':
+        text = re.sub('[^A-Za-z0-9-/ ]+', '', text)
+        #shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
+        #i = shortword.sub('', i)
+        text = text.lstrip()
+        text = text.rstrip()
+        text = re.sub(r'\s{2,}', '', text) 
+        
+    return text
+
+
+# def clean_text(text_list):
+#     my_list = []
+#     for i in text_list:
+#         if i != ' ' or i != '  ' or i != '':
+#             i = re.sub('[^A-Za-z0-9-/ ]+', '', i)
+#             #shortword = re.compile(r'\W*\b[^0-9/]\w{1,2}\b')
+#             #i = shortword.sub('', i)
+#             i = i.lstrip()
+#             i = i.rstrip()
+#             i = re.sub('\s{2,}', '', i) 
+#             if i == '':
+#                 continue
+#             my_list.append(i)
+#     return my_list
 
 
 def get_photo(image):
