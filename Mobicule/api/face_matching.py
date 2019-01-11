@@ -29,4 +29,4 @@ def match_faces(id_card_image, ref_image):
 
         return result, percent
     except:
-        return 'No Faces Found'
+        return False, 0

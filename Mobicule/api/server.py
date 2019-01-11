@@ -6,6 +6,7 @@ from cheque_details_extraction import get_micrcode, ensemble_acc_output, ensembl
 import datetime
 import base64
 import db
+from face_matching import match_faces
 
 app = Flask(__name__)
 UPLOAD_FOLDER = './UPLOAD_FOLDER/'
@@ -48,10 +49,10 @@ def ganesh():
             photo.save(filename)
 
             data, photo_path = recognise_text_wo_template(filename, photo_path)
-
+            print(photo_path)
             dictOfWords = { idx : text for idx, text in enumerate(data) }
             print(dictOfWords)
-            return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': photo_path })
+            return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': photo_path})
     else:
         return jsonify({'status':False})
 
@@ -172,7 +173,7 @@ def findText_wo_template():
                 f.write(base64.b64decode(image_file))
 
             data, photo_path = recognise_text_wo_template(filename, photo_path)
-
+            
             dictOfWords = { i : i for i in data }
             print(dictOfWords)
             return jsonify({'status':True, 'fields': dictOfWords, 'image_path': filename, 'photo_path': photo_path })
@@ -180,6 +181,23 @@ def findText_wo_template():
         return jsonify({'status':False})
 
 
+@app.route('/image/face_match',methods=['GET','POST'])
+def face_match():
+
+    current_time = str(datetime.datetime.now())
+
+    filename = UPLOAD_FOLDER + 'temp' + '/' + current_time + '.png'
+    print(request.form.to_dict())
+    photo_path = request.form.to_dict().get('photopath')
+    print(photo_path)
+    photo = request.files['liveface']
+    photo.save(filename)
+    
+    result, percent = match_faces(id_card_image=photo_path, ref_image=filename)
+    print(result, percent)
+    return jsonify({'status':str(result), 'percent': percent })
+
 # running web app in local machine
 if __name__ == '__main__':
+    
     app.run(host='0.0.0.0', port=5000, debug=True)
