@@ -8,7 +8,8 @@ import sys
 import cv2
 import numpy as np
 import tensorflow as tf
-from tensorflow.python.platform import gfile
+# from tensorflow.python.platform import gfile
+from tensorflow.gfile import GFile
 
 sys.path.append(os.getcwd())
 from lib.fast_rcnn.config import cfg, cfg_from_file
@@ -16,6 +17,25 @@ from lib.fast_rcnn.test import _get_blobs
 from lib.text_connector.detectors import TextDetector
 from lib.text_connector.text_connect_cfg import Config as TextLineCfg
 from lib.rpn_msr.proposal_layer_tf import proposal_layer
+
+
+cfg_from_file('ctpn/text.yml')
+
+# init session
+config = tf.ConfigProto(allow_soft_placement=True)
+sess = tf.Session(config=config)
+with GFile('data/ctpn.pb', 'rb') as f:
+    graph_def = tf.GraphDef()
+    graph_def.ParseFromString(f.read())
+    sess.graph.as_default()
+    tf.import_graph_def(graph_def, name='')
+sess.run(tf.global_variables_initializer())
+
+input_img = sess.graph.get_tensor_by_name('Placeholder:0')
+output_cls_prob = sess.graph.get_tensor_by_name('Reshape_2:0')
+output_box_pred = sess.graph.get_tensor_by_name('rpn_bbox_pred/Reshape_1:0')
+
+textdetector = TextDetector()
 
 
 def resize_im(im, scale, max_scale=None):
@@ -31,10 +51,10 @@ def draw_boxes(img, image_name, boxes, scale):
     for box in boxes:
         if np.linalg.norm(box[0] - box[1]) < 5 or np.linalg.norm(box[3] - box[0]) < 5:
             continue
-        if box[8] >= 0.9:
-            color = (0, 255, 0)
-        elif box[8] >= 0.8:
-            color = (255, 0, 0)
+        # if box[8] >= 0.9:
+        #     color = (0, 255, 0)
+        # elif box[8] >= 0.8:
+        #     color = (255, 0, 0)
         # cv2.line(img, (int(box[0]), int(box[1])), (int(box[2]), int(box[3])), color, 2)
         # cv2.line(img, (int(box[0]), int(box[1])), (int(box[4]), int(box[5])), color, 2)
         # cv2.line(img, (int(box[6]), int(box[7])), (int(box[2]), int(box[3])), color, 2)
@@ -51,32 +71,6 @@ def draw_boxes(img, image_name, boxes, scale):
 
 def get_coords(image_name):
 
-    # if os.path.exists("data/results/"):
-    #     shutil.rmtree("data/results/")
-    # os.makedirs("data/results/")
-
-    cfg_from_file('ctpn/text.yml')
-
-    # init session
-    config = tf.ConfigProto(allow_soft_placement=True)
-    sess = tf.Session(config=config)
-    with gfile.FastGFile('data/ctpn.pb', 'rb') as f:
-        graph_def = tf.GraphDef()
-        graph_def.ParseFromString(f.read())
-        sess.graph.as_default()
-        tf.import_graph_def(graph_def, name='')
-    sess.run(tf.global_variables_initializer())
-
-    input_img = sess.graph.get_tensor_by_name('Placeholder:0')
-    output_cls_prob = sess.graph.get_tensor_by_name('Reshape_2:0')
-    output_box_pred = sess.graph.get_tensor_by_name('rpn_bbox_pred/Reshape_1:0')
-
-    # im_names = glob.glob(os.path.join(cfg.DATA_DIR, 'demo', '*.png')) + \
-    #            glob.glob(os.path.join(cfg.DATA_DIR, 'demo', '*.jpg'))
-
-    # for im_name in im_names:
-    #     print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-    #     print(('Demo for {:s}'.format(im_name)))
     img = cv2.imread(image_name)
     img, scale = resize_im(img, scale=TextLineCfg.SCALE, max_scale=TextLineCfg.MAX_SCALE)
     blobs, im_scales = _get_blobs(img, None)
@@ -90,7 +84,7 @@ def get_coords(image_name):
 
     scores = rois[:, 0]
     boxes = rois[:, 1:5] / im_scales[0]
-    textdetector = TextDetector()
+    # textdetector = TextDetector()
     boxes = textdetector.detect(boxes, scores[:, np.newaxis], img.shape[:2])
     all_coords = draw_boxes(img, image_name, boxes, scale)
     return all_coords
