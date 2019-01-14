@@ -26,7 +26,8 @@ def index():
         
         if image_type == 'Bank Cheque':
             details = {}
-
+            photo = request.files['photo']
+            photo.save(filename)
             details['MICR'] = get_micrcode(filename)
             details['ACC.No'] = ensemble_acc_output(filename)
             details['IFSC'] = ensemble_ifsc_output(filename)
