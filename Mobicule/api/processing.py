@@ -21,7 +21,7 @@ def recognise_text_wo_template(image_path, photo_path):
         _, thresh = cv2.threshold(temp, 100, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
         thresh = cv2.copyMakeBorder(thresh, 10, 10, 10, 10, cv2.BORDER_CONSTANT, value=[255, 255, 255])
-        text = pyt.image_to_string(thresh, lang="eng+hin", config=('--oem 1 --psm 3'))
+        text = pyt.image_to_string(thresh, lang="eng+hin+mar", config=('--oem 1 --psm 3'))
         
         text = clean_text(text)
         if len(text) < 3:
