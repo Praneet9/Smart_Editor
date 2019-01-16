@@ -2,9 +2,12 @@ import cv2
 import pytesseract as pyt
 import re
 from ctpn.demo_pb import get_coords
+import numpy as np
+from keras.models import model_from_json
+import tensorflow as tf
 
 
-def recognise_text_wo_template(image_path, photo_path):
+def recognise_text(image_path, photo_path):
     
     image = cv2.imread(image_path, 0)
 
@@ -48,6 +51,23 @@ def clean_text(text):
     return text
 
 
+def seven_segment(image_path):
+    
+    image = cv2.imread(image_path, 0)
+
+    hist, _ = np.histogram(image,256,[0,256])
+
+    _, img = cv2.threshold(image, np.argmax(hist) - 15, 255, cv2.THRESH_BINARY_INV)
+
+    noise_cleared = cv2.fastNlMeansDenoising(img, None, 4, 7, 21)
+
+    lines_removed = _lineRemoval(noise_cleared)
+
+    text = _character_segmentation(lines_removed)
+
+    return text
+
+
 def get_photo(image):
     '''
     Image Should be 1920 x 1080 pixels
@@ -68,3 +88,168 @@ def get_photo(image):
         return face, True
     except Exception as _:
         return "Photo not found!", False
+
+def _lineRemoval(img):
+    min_length=140
+    matrix = _imgToMatrixR(img)
+    for i in range(0, len(matrix)):
+        row=matrix[i]
+        start=-1
+        end=0
+        conn=0
+        for j in range(0, len(row)):
+            if (row[j]==0):
+                conn=conn+1
+                # first point in the line .
+                if( start == -1 ):
+                    start = j
+                # last point in the row .
+                if( j == len(row)-1 ):
+                    end =j
+                    if (conn > min_length):
+                        img[i-2:i+4, start:end+1] = 255
+                    start = -1
+                    end = 0
+                    conn = 0
+            # end of the line
+            else:
+                end =j
+                if (conn >min_length):
+                    img[i-2:i+4, start:end+1] = 255
+                start = -1
+                end = 0
+                conn = 0
+#     showImage('after line', img)
+    return img
+
+'''
+this function convert image into matrix of image rows
+'''
+def _imgToMatrixR(img):
+    # get dimensions
+    height, width = img.shape
+    matrix = []
+    # getting pixels values for all rows
+    for i in range(0, height):
+        row = []
+        for j in range(0, width):
+            row.append(img[i,j])
+        matrix.append(row)
+    return matrix
+
+'''
+this function convert image into matrix of image columns
+'''
+def _imgToMatrixC(img):
+    # get dimensions
+    height, width = img.shape
+    matrix = []
+    # getting pixels values for all columns
+    for i in range(0, width):
+        col = []
+        for j in range(0, height):
+            col.append(img[j, i])
+        matrix.append(col)
+    return matrix
+
+'''
+this function clears all horizontal boundaries around the input image
+'''
+def clearBounds_horiz(img):
+#     showImage('before horizontal', img)
+    height, width = img.shape
+    matrix = _imgToMatrixR(img)
+    white_counter = _countPixel(matrix,255)
+
+    for i in range (0,height):
+        if(white_counter[i]>= width-1):
+            img = img[1:height,0:width]
+        else:
+            break
+
+    new_height, width = img.shape
+    for i in range (1,height):
+        if(white_counter[height-i]>= width-1):
+            img = img[0:new_height-i,0:width]
+        else:
+            break
+#     showImage('after horizontal', img)
+    return img
+
+'''
+this function clears all vertical boundaries around the input image
+'''
+def clearBounds_vert(img):
+#     showImage('before vertical', img)
+    height, width = img.shape
+    matrix = _imgToMatrixC(img)
+    white_counter = _countPixel(matrix,255)
+
+    for i in range (0,width):
+        if(white_counter[i]>= height-1):
+            img = img[0:height,1:width]
+        else:
+            break
+
+    height, new_width = img.shape
+    for i in range (1,width):
+        if(white_counter[width-i]>= height-1):
+            img = img[0:height,0:new_width-i]
+        else:
+            break
+#     showImage('after vertical', img)
+    return img
+
+'''
+this function count a specific value (parameter p) in matrix
+'''
+def _countPixel(matrix,p):
+    counter = []
+    for k in range(0, len(matrix)):
+        counter.append(matrix[k].count(p))
+    return counter
+
+def _character_segmentation(img):
+    height = img.shape[0] / 3
+    
+    dilated = cv2.dilate(img, np.ones((1, 1)), iterations = 2)
+    dilated = cv2.dilate(img, np.ones((40, 1)), iterations = 1)
+    
+    # canny = cv2.Canny(dilated, 30, 150)
+    
+    _, ctrs_line, _ = cv2.findContours(dilated.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    sorted_ctrs_line = sorted(ctrs_line, key=lambda ctr: cv2.boundingRect(ctr)[0])
+    
+    text = ''
+
+    for ctr_line in sorted_ctrs_line:
+        x_character, y_character, w_character, h_character = cv2.boundingRect(ctr_line)
+        if h_character < height:
+            continue
+
+        cropped_line = img[y_character:y_character + h_character, x_character:x_character + w_character]
+#         cropped_line = cv2.copyMakeBorder(cropped_line, 2, 2, 2, 2, cv2.BORDER_CONSTANT)
+#         showImage('image', cropped_line)
+        
+        cropped_line = cv2.resize(cropped_line, (20, 20), None)
+        cropped_line = cv2.copyMakeBorder(cropped_line, 6, 6, 6, 6, cv2.BORDER_CONSTANT)
+
+        output = model.predict_classes(cropped_line.reshape(-1, 32, 32, 1))
+        text += str(output[0])
+
+    return text
+
+def _init_model():
+    global model, graph
+
+    json_file = open('model/model.json', 'r')
+    loaded_model_json = json_file.read()
+    json_file.close()
+    model = model_from_json(loaded_model_json)
+    model.load_weights("model/model.h5")
+    print("Loaded Model from disk")
+
+    # compile and evaluate model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    graph = tf.get_default_graph()

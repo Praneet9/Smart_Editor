@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import os
-from processing import recognise_text_wo_template
+from processing import recognise_text, seven_segment, _init_model
 from cheque_details_extraction import get_micrcode, ensemble_acc_output, ensemble_ifsc_output
 import datetime
 import db
@@ -8,6 +8,8 @@ from face_matching import match_faces
 
 app = Flask(__name__)
 UPLOAD_FOLDER = './UPLOAD_FOLDER/'
+
+_init_model()
 
 @app.route('/image/upload', methods=['POST'])
 def index():
@@ -34,13 +36,22 @@ def index():
 
             return jsonify({'status':True, 'fields': details, 'image_path': filename, 'photo_path': 'none' })
 
+        elif image_type == 'Seven Segment':
+            details = {}
+            photo = request.files['photo']
+            photo.save(filename)
+
+            text = seven_segment(filename)
+
+            return jsonify({'status':True, 'fields': text, 'image_path': filename, 'photo_path': 'none' })
+
         else:
             photo_path = UPLOAD_FOLDER + image_type + '/' + 'faces' + '/' + current_time + '.png'
             
             photo = request.files['photo']
             photo.save(filename)
 
-            data, photo_path = recognise_text_wo_template(filename, photo_path)
+            data, photo_path = recognise_text(filename, photo_path)
             details = { idx : text for idx, text in enumerate(data) }
 
             return jsonify({'status':True, 'fields': details, 'image_path': filename, 'photo_path': photo_path})
