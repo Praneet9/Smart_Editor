@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import os
-from processing import recognise_text, seven_segment, _init_model
+from processing import recognise_text, seven_segment, _init_model, get_labels_from_aadhar, get_labels_from_licence
 from cheque_details_extraction import get_micrcode, ensemble_acc_output, ensemble_ifsc_output
 import datetime
 import db
@@ -54,7 +54,11 @@ def index():
             photo.save(filename)
 
             data, photo_path = recognise_text(filename, photo_path)
-            details = { idx : text for idx, text in enumerate(data) }
+            #details = { idx : text for idx, text in enumerate(data) }
+            if image_type == "Driving Licence":
+                details = get_labels_from_licence(data)
+            elif image_type == "Aadhar Card":
+                details = get_labels_from_aadhar(data)
 
             return jsonify({'status':True, 'fields': details, 'image_path': filename, 'photo_path': photo_path})
     else:

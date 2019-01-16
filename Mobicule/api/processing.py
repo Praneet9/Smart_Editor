@@ -50,6 +50,105 @@ def clean_text(text):
         
     return text
 
+def get_labels_from_licence(details1):
+    imp = {}
+    for idx in range(len(details1)):
+        if 'DL No' in details1[idx]:
+            imp["DL NO"] = details1[idx].split('DL No')[-1].strip()
+            del details1[idx]
+        elif details1[idx].startswith('DOB'):
+            dob = re.findall(r"([0-9]{2}\-[0-9]{2}\-[0-9]{4})", details1[idx].split(' ', 1)[1])[0]
+            #imp["DOB"] = details1[idx].split(' ', 1)[1].strip().split(r"[0-9]{0,2}\-[0-9]{0,2}\-[0-9]{0,4}", 1)[0]
+            imp["Date of Birth"] = dob
+            del details1[idx]
+            imp["Name"] = details1[idx + 1].split(' ', 1)[1].strip()
+            del details1[idx + 1]
+            try:
+                imp["Father's Name"] = details1[idx + 2].split('of',1)[1].strip()
+                del details1[idx + 2]
+            except Exception as _:
+                imp["Father's Name"] = details1[idx + 2].split('Of',1)[1].strip()
+                del details1[idx + 2]
+            i = 4
+            address = details1[idx + 3].split('Add', 1)[1].strip()
+            del details1[idx + 3]
+            while not details1[idx + i].startswith('PIN') and i < 8:
+                if details1[idx + i].isupper() != True:
+                    del details1[idx + i]
+                    i += 1
+                    continue
+                address += ' ' + details1[idx + i]
+                del details1[idx + i]
+                i += 1
+            imp["Address"] = address
+            imp["Pin Code"] = details1[idx + i].split(' ', 1)[1]
+            del details1[idx + i]
+            break
+        elif details1[idx].startswith('Name'):
+            dob = re.findall(r"([0-9]{2}\-[0-9]{2}\-[0-9]{4})", details1[idx - 1].split(' ', 1)[1])[0]
+            imp["Date of Birth"] = dob
+            del details1[idx - 1]
+            imp["Name"] = details1[idx][4:].strip()
+            del details1[idx]
+            try:
+                imp["Father's Name"] = details1[idx + 2].split('of',1)[1].strip()
+                del details1[idx + 2]
+            except Exception as _:
+                imp["Father's Name"] = details1[idx + 2].split('Of',1)[1].strip()
+                del details1[idx + 2]
+            i = 3
+            address = details1[idx + 2].split('Add', 1)[1].strip()
+            del details1[idx + 2]
+            while not details1[idx + i].startswith('PIN') and i < 7:
+                if details1[idx + i].isupper() != True:
+                    del details1[idx + i]
+                    i += 1
+                    continue
+                address += ' ' + details1[idx + i]
+                del details1[idx + i]
+                i += 1
+            imp["Address"] = address
+            imp["Pin Code"] = details1[idx + i].split(' ', 1)[1]
+            del details1[idx + i]
+            break
+    return imp
+
+
+def get_labels_from_aadhar(temp):
+    imp = {}
+    temp = temp[::-1]
+    for idx in range(len(temp)):
+        if re.search(r"[0-9]{4}\s[0-9]{4}\s[0-9]{4}", temp[idx]):
+            try:
+                imp['Aadhar No'] = re.findall(r"[0-9]{4}\s[0-9]{4}\s[0-9]{4}", temp[idx])[0]
+            except Exception as _:
+                imp['Aadhar No'] = "Not Found"
+            if temp[idx + 1].endswith("Female") or temp[idx + 1].endswith("FEMALE"):
+                imp["Gender"] = "Female"
+            elif temp[idx + 1].endswith("Male") or temp[idx + 1].endswith("MALE"):
+                imp["Gender"] = "Male"
+            elif temp[idx + 2].endswith("Female") or temp[idx + 2].endswith("FEMALE"):
+                imp["Gender"] = "Female"
+            elif temp[idx + 2].endswith("Male") or temp[idx + 2].endswith("MALE"):
+                imp["Gender"] = "Male"
+            elif temp[idx + 3].endswith("Female") or temp[idx + 3].endswith("FEMALE"):
+                imp["Gender"] = "Female"
+            elif temp[idx + 3].endswith("Male") or temp[idx + 3].endswith("MALE"):
+                imp["Gender"] = "Male"
+        elif re.search(r"[0-9]{2}\-|/[0-9]{2}\-|/[0-9]{4}", temp[idx]):
+            try:
+                imp["Date of Birth"] = re.findall(r"[0-9]{2}\-[0-9]{2}\-[0-9]{4}", temp[idx])[0]
+            except Exception as _:
+                imp["Date of Birth"] = re.findall(r"[0-9]{2}/[0-9]{2}/[0-9]{4}", temp[idx])[0]
+            imp["Name"] = temp[idx + 1]
+        elif "Year of Birth" in temp[idx]:
+            try:
+                imp["Year of Birth"] = re.findall(r"[0-9]{4}", temp[idx])[0]
+            except Exception as _:
+                imp["Year of Birth"] = "Not Found"
+            imp["Name"] = temp[idx + 1]
+    return imp
+
 
 def seven_segment(image_path):
     
