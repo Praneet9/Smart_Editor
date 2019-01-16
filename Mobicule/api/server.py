@@ -43,7 +43,9 @@ def index():
 
             text = seven_segment(filename)
 
-            return jsonify({'status':True, 'fields': text, 'image_path': filename, 'photo_path': 'none' })
+            details[0] = text
+
+            return jsonify({'status':True, 'fields': details, 'image_path': filename, 'photo_path': 'none' })
 
         else:
             photo_path = UPLOAD_FOLDER + image_type + '/' + 'faces' + '/' + current_time + '.png'
