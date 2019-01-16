@@ -5,7 +5,7 @@ from ctpn.demo_pb import get_coords
 import numpy as np
 from keras.models import model_from_json
 import tensorflow as tf
-
+from keras import backend as k
 
 def recognise_text(image_path, photo_path):
     
@@ -333,22 +333,26 @@ def _character_segmentation(img):
         cropped_line = cv2.resize(cropped_line, (20, 20), None)
         cropped_line = cv2.copyMakeBorder(cropped_line, 6, 6, 6, 6, cv2.BORDER_CONSTANT)
 
-        output = model.predict_classes(cropped_line.reshape(-1, 32, 32, 1))
-        text += str(output[0])
+        k.set_session(session)
+        with my_graph.as_default():
+            output = model.predict_classes(cropped_line.reshape(-1, 32, 32, 1))
+            text += str(output[0])
 
     return text
 
 def _init_model():
-    global model, graph
+    global model, my_graph, session
 
-    json_file = open('model/model.json', 'r')
-    loaded_model_json = json_file.read()
-    json_file.close()
-    model = model_from_json(loaded_model_json)
-    model.load_weights("model/model.h5")
-    print("Loaded Model from disk")
+    my_graph = tf.Graph()
+    with my_graph.as_default():
+        session = tf.Session()
+        with session.as_default():
+            json_file = open('model/model.json', 'r')
+            loaded_model_json = json_file.read()
+            json_file.close()
+            model = model_from_json(loaded_model_json)
+            model.load_weights("model/model.h5")
+            print("Loaded Model from disk")
 
-    # compile and evaluate model
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
-    graph = tf.get_default_graph()
+            # compile and evaluate model
+            model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
